@@ -10,7 +10,9 @@ def index():
     client = MongoClient('mongodb://localhost:27017/')
     db = client.local 
     coll = db.temps
-    list = [doc for doc in coll.find()]
+    #list = [doc for doc in coll.find()]
+    # print(list)
+    list = [{"when": doc['time'], "temp": doc['value']} for doc in coll.find()]
     print(str(len(list)) + ' temp records found')
 
     jList = json_util.dumps(list)
