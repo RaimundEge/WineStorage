@@ -393,7 +393,7 @@ class Temper(object):
     client = MongoClient('mongodb://localhost:27017/')
     db = client.local 
     coll = db.temps
-    coll.insert_one({"time": datetime.datetime.now(), "value": results[0]['internal temperature'] })
+    coll.insert_one({"time": datetime.datetime.utcnow(), "value": results[0]['internal temperature'] })
        
   def main(self):
     '''An example 'main' entry point that can be used to make temper.py a
