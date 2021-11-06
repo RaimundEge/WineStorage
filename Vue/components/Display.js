@@ -5,9 +5,10 @@ app.component('display', {
             <button class="item-right" @click="getTemps()">Update</button>
             Show: <select v-model="range">
                     <option value="all">all</option>
-                    <option value="today">today</option>
-                    <option value="seven">week</option>
-                    <option value="thirty">30 days</option>
+                    <option value="hour">last 12 hours</option>
+                    <option value="day">last 24 hours</option>
+                    <option value="week">last 7 days</option>
+                    <option value="month">last 30 days</option>
                 </select>            
             <line-chart :data="data"></line-chart>
          </div>`,
@@ -31,7 +32,7 @@ app.component('display', {
             console.log(this.temps)
         },
         format(when) {
-            return new Date(when).toUTCString().slice(0,22)
+            return new Date(when).toString().slice(0,22)
         }
     },
     computed: {
