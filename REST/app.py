@@ -13,7 +13,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 @app.route('/')
 @cross_origin()
 def index():
-    print(request.args.get('range'))
+    # print(request.args.get('range'))
     client = MongoClient('mongodb://localhost:27017/')
     db = client.local 
     coll = db.temps
@@ -34,4 +34,4 @@ def index():
     return Response(jList, mimetype='application/json')
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=False, host='0.0.0.0')

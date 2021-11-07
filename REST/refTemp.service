@@ -1,0 +1,14 @@
+[Unit]
+Description=Refrigerator Temperature
+After=network.target
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/WineStorage/REST
+ExecStart=python3 app.py
+StandardOutput=file:/home/pi/WineStorage/REST/logFile
+StandardError=file:/home/pi/WineStorage/REST/logFile
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
