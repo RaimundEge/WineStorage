@@ -10,13 +10,17 @@ app.component('display', {
                     <option value="week">last 7 days</option>
                     <option value="month">last 30 days</option>
                 </select>         
+                &nbsp;&nbsp;&nbsp;&nbsp;Select degrees&nbsp;
+                <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
+                <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
             <line-chart :data="data" class="chart" empty="loading data ..."></line-chart>
          </div>`,
     data() {
         return {
             temps: null,
             range: 'hour',
-            oldRange: 'all'
+            oldRange: 'all',
+		degree: 'fahrenheit'
         }
     },
     methods: {
@@ -40,7 +44,7 @@ app.component('display', {
             } else {
                 for (var item of this.temps) {
                     // console.log(item)
-                    data[this.format(item.when["$date"])] = item.temp
+                    data[this.format(item.when["$date"])] = this.degree == 'celsius'?item.temp:((item.temp*9/5)+32)
                 } 
             }             
             return data
