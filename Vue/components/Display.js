@@ -26,7 +26,7 @@ app.component('display', {
     methods: {
         async getTemps() {
             NProgress.start()
-            var resp = await axios.get('http://192.168.1.23:5000/' + `?range=${this.range}`)
+            var resp = await axios.get('data/' + `?range=${this.range}`)
             this.temps = resp.data         
             // console.log(this.temps)
             NProgress.done()
