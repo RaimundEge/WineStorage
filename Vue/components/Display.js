@@ -2,7 +2,10 @@ app.component('display', {
     template:
         /*html*/
         `<div class="display"> 
-            <button class="item-right" @click="getTemps()">Update</button>
+            <div class="item-right">
+                {{last}} &nbsp;
+                <button @click="getTemps()">Update</button>
+            </div>
             Show: <select v-model="range">
                     <option value="all">all</option>
                     <option value="hour">last 12 hours</option>
@@ -32,7 +35,7 @@ app.component('display', {
             NProgress.done()
         },
         format(when) {
-            return new Date(when).toString().slice(0,22)
+            return new Date(when).toString().slice(0,21)
         }
     },
     computed: {
@@ -48,6 +51,16 @@ app.component('display', {
                 } 
             }             
             return data
+        },
+        last() {
+            if (this.temps == null) {
+                return ""
+            } else {
+                // console.log(this.temps.length)
+                var lastEntry = this.temps[this.temps.length-1]
+                var temp = Math.round((this.degree == 'celsius'?lastEntry.temp:((lastEntry.temp*9/5)+32))*10) / 10
+                return temp + '\xB0' + " at " + this.format(lastEntry.when["$date"])
+            }
         }
     }
 })
