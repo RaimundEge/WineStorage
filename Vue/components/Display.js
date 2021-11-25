@@ -16,7 +16,7 @@ app.component('display', {
                 &nbsp;&nbsp;&nbsp;&nbsp;Select degrees&nbsp;
                 <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
                 <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
-            <line-chart :data="data" :points="false" :round="1" class="chart" empty="loading data ..."></line-chart>
+            <line-chart :data="data" :min="min" :max="max" :points="false" :round="1" class="chart" empty="loading data ..."></line-chart>
          </div>`,
     data() {
         return {
@@ -41,6 +41,7 @@ app.component('display', {
     computed: {
         data() {            
             var data = {}
+            var ideal = {}
             if (this.temps == null || this.range !== this.oldRange) {
                 this.getTemps()
                 this.oldRange = this.range
@@ -48,9 +49,10 @@ app.component('display', {
                 for (var item of this.temps) {
                     // console.log(item)
                     data[this.format(item.when["$date"])] = this.degree == 'celsius'?item.temp:((item.temp*9/5)+32)
+                    ideal[this.format(item.when["$date"])] = this.degree == 'celsius'?10.0:50.0
                 } 
-            }             
-            return data
+            }            
+            return [{name: 'actual', data: data}, {name: 'ideal', data: ideal}]
         },
         last() {
             if (this.temps == null) {
@@ -58,9 +60,15 @@ app.component('display', {
             } else {
                 // console.log(this.temps.length)
                 var lastEntry = this.temps[this.temps.length-1]
-                var temp = Math.round((this.degree == 'celsius'?lastEntry.temp:((lastEntry.temp*9/5)+32))*10) / 10
+                var temp = Math.round((this.degree == 'celsius'?lastEntry.temp:((lastEntry.temp*9/5)+32))*10)/10
                 return temp + '\xB0' + " at " + this.format(lastEntry.when["$date"])
             }
+        },
+        min() {
+            return this.degree=='celsius'?0:32;
+        },
+        max() {
+            return this.degree=='celsius'?20:68;
         }
     }
 })
