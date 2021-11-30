@@ -10,6 +10,7 @@ app.component('display', {
                     <option value="all">all</option>
                     <option value="hour">last 12 hours</option>
                     <option value="day">last 24 hours</option>
+                    <option value="2day">last 48 hours</option>
                     <option value="week">last 7 days</option>
                     <option value="month">last 30 days</option>
                 </select>         

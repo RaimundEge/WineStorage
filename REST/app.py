@@ -21,6 +21,7 @@ def index():
         'all': timedelta(weeks = 52),
         'hour': timedelta(hours = 12),
         'day': timedelta(days = 1),
+        '2day': timedelta(days = 2),
         'week': timedelta(weeks = 1),
         'month': timedelta(days = 30),
     }
