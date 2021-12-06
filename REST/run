@@ -1,3 +1,4 @@
 #! /bin/bash
-rm -rf log.txt
-python3 app.py > log.txt
+LOGFILE=/home/pi/WineStorage/REST/log.txt
+rm -rf $LOGFILE
+python3 app.py >& $LOGFILE
