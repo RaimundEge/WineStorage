@@ -8,7 +8,10 @@ app.component('display', {
             </div>
             Show: <select v-model="range">
                     <option value="all">all</option>
-                    <option value="hour">last 12 hours</option>
+                    <option value="hour">last hour</option>
+                    <option value="2hours">last 2 hours</option>
+                    <option value="6hours">last 6 hours</option>
+                    <option value="12hours">last 12 hours</option>
                     <option value="day">last 24 hours</option>
                     <option value="2day">last 48 hours</option>
                     <option value="week">last 7 days</option>
@@ -24,7 +27,7 @@ app.component('display', {
             temps: null,
             range: 'hour',
             oldRange: 'all',
-		degree: 'fahrenheit'
+		    degree: 'fahrenheit'
         }
     },
     methods: {

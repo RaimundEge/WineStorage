@@ -19,7 +19,10 @@ def index():
     coll = db.temps
     switcher = {
         'all': timedelta(weeks = 52),
-        'hour': timedelta(hours = 12),
+        'hour': timedelta(hours = 1),
+        '2hours': timedelta(hours = 2),
+        '6hours': timedelta(hours = 6),
+        '12hours': timedelta(hours = 12),
         'day': timedelta(days = 1),
         '2day': timedelta(days = 2),
         'week': timedelta(weeks = 1),
@@ -27,14 +30,17 @@ def index():
     }
     compare = datetime.utcnow() - switcher.get(request.args.get('range'), timedelta(hours = 24))
     cursor = coll.find({"time": { "$gt": compare}}) 
-    oList = [{"when": doc['time'], "temp": doc['value']} for doc in cursor]   
+    oList = [{"when": doc['time'], "temp": (doc['value']-1.7)} for doc in cursor]   
     print(str(len(oList)) + ' temp records found')
-    div = int(round(len(oList)/360))
-    list = []
-    for i in range(len(oList)-1):
-        if i%div == 0:
-            list.append(oList[i]) 
-    list.append(oList[len(oList)-1])     
+    if len(oList) > 360:
+        div = int(round(len(oList)/360))
+        list = []
+        for i in range(len(oList)-1):
+            if i%div == 0:
+                list.append(oList[i]) 
+        list.append(oList[len(oList)-1]) 
+    else:
+        list = oList    
     print(str(len(list)) + ' temp records made')
     return Response(json_util.dumps(list), mimetype='application/json')
 
