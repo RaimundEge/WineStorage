@@ -20,7 +20,7 @@ app.component('display', {
                 &nbsp;&nbsp;&nbsp;&nbsp;Select degrees&nbsp;
                 <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
                 <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
-            <line-chart :data="data" :min="min" :max="max" :points="false" :round="1" class="chart" empty="loading data ..."></line-chart>
+            <line-chart :data="data" :min="min" :max="max" :points="false" :round="1" :colors="['#b00', '#cbb', '#bbc']" class="chart" empty="loading data ..."></line-chart>
          </div>`,
     data() {
         return {
@@ -45,7 +45,8 @@ app.component('display', {
     computed: {
         data() {            
             var data = {}
-            var ideal = {}
+            var idealLow = {}
+            var idealHigh = {}
             if (this.temps == null || this.range !== this.oldRange) {
                 this.getTemps()
                 this.oldRange = this.range
@@ -53,10 +54,11 @@ app.component('display', {
                 for (var item of this.temps) {
                     // console.log(item)
                     data[this.format(item.when["$date"])] = this.degree == 'celsius'?item.temp:((item.temp*9/5)+32)
-                    ideal[this.format(item.when["$date"])] = this.degree == 'celsius'?10.0:50.0
+                    idealLow[this.format(item.when["$date"])] = this.degree == 'celsius'?10.0:50.0
+                    idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius'?13.89:57.0
                 } 
             }            
-            return [{name: 'actual', data: data}, {name: 'ideal', data: ideal}]
+            return [{name: 'actual', data: data}, {name: 'ideal Low', data: idealLow}, {name: 'ideal High', data: idealHigh}]
         },
         last() {
             if (this.temps == null) {
