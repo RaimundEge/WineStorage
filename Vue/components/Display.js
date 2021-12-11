@@ -20,7 +20,7 @@ app.component('display', {
                 &nbsp;&nbsp;&nbsp;&nbsp;Select degrees&nbsp;
                 <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
                 <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
-            <line-chart :data="data" :min="min" :max="max" :points="false" :round="1" :colors="['#b00', '#cbb', '#bbc']" class="chart" empty="loading data ..."></line-chart>
+            <line-chart :data="data" :min="min" :max="max" :points="false" :round="1" :colors="['#FF0800', '#cbb', '#bbc']" class="chart" empty="loading data ..."></line-chart>
          </div>`,
     data() {
         return {
