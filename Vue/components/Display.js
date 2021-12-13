@@ -25,9 +25,10 @@ app.component('display', {
     data() {
         return {
             temps: null,
+	    average: 0,
             range: 'hour',
             oldRange: 'all',
-		    degree: 'fahrenheit'
+	    degree: 'fahrenheit'
         }
     },
     methods: {
@@ -53,10 +54,12 @@ app.component('display', {
             } else {
                 for (var item of this.temps) {
                     // console.log(item)
+		    this.average += (this.degree=='celsius'?item.temp:((item.temp*9/5)+32))
                     data[this.format(item.when["$date"])] = this.degree == 'celsius'?item.temp:((item.temp*9/5)+32)
-                    idealLow[this.format(item.when["$date"])] = this.degree == 'celsius'?10.0:50.0
-                    idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius'?13.89:57.0
+                    idealLow[this.format(item.when["$date"])] = this.degree == 'celsius'?12.78:55.0
+                    idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius'?15.0:59.0
                 } 
+		this.average /= this.temps.length
             }            
             return [{name: 'actual', data: data}, {name: 'ideal Low', data: idealLow}, {name: 'ideal High', data: idealHigh}]
         },
@@ -66,8 +69,9 @@ app.component('display', {
             } else {
                 // console.log(this.temps.length)
                 var lastEntry = this.temps[this.temps.length-1]
-                var temp = Math.round((this.degree == 'celsius'?lastEntry.temp:((lastEntry.temp*9/5)+32))*10)/10
-                return temp + '\xB0' + " at " + this.format(lastEntry.when["$date"])
+                var temp = Math.round((this.degree == 'celsius'?lastEntry.temp:((lastEntry.temp*9/5)+32))*10)/10 + '\xB0'
+		var avg = Math.round(this.average*10)/10 + '\xB0'
+                return temp + "(avg: " + avg + ") at " + this.format(lastEntry.when["$date"])
             }
         },
         min() {
