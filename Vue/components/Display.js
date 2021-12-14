@@ -25,26 +25,26 @@ app.component('display', {
     data() {
         return {
             temps: null,
-	    average: 0,
+            average: 0,
             range: 'hour',
             oldRange: 'all',
-	    degree: 'fahrenheit'
+            degree: 'fahrenheit'
         }
     },
     methods: {
         async getTemps() {
             NProgress.start()
             var resp = await axios.get('data/' + `?range=${this.range}`)
-            this.temps = resp.data         
+            this.temps = resp.data
             // console.log(this.temps)
             NProgress.done()
         },
         format(when) {
-            return new Date(when).toString().slice(0,21)
+            return new Date(when).toString().slice(0, 21)
         }
     },
     computed: {
-        data() {            
+        data() {
             var data = {}
             var idealLow = {}
             var idealHigh = {}
@@ -52,33 +52,39 @@ app.component('display', {
                 this.getTemps()
                 this.oldRange = this.range
             } else {
+                this.average = 0;
                 for (var item of this.temps) {
                     // console.log(item)
-		    this.average += (this.degree=='celsius'?item.temp:((item.temp*9/5)+32))
-                    data[this.format(item.when["$date"])] = this.degree == 'celsius'?item.temp:((item.temp*9/5)+32)
-                    idealLow[this.format(item.when["$date"])] = this.degree == 'celsius'?12.78:55.0
-                    idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius'?15.0:59.0
-                } 
-		this.average /= this.temps.length
-            }            
-            return [{name: 'actual', data: data}, {name: 'ideal Low', data: idealLow}, {name: 'ideal High', data: idealHigh}]
+                    this.average += (this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32))
+                    data[this.format(item.when["$date"])] = this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32)
+                    idealLow[this.format(item.when["$date"])] = this.degree == 'celsius' ? 12.78 : 55.0
+                    idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius' ? 15.0 : 59.0
+                }
+                console.log('recomputed average: ' + this.average + ', ' + this.temps.length + ', ' + (this.average/this.temps.length))
+                this.average /= this.temps.length
+            }
+	    if (this.range.includes('hour')) {
+           	 return [{ name: 'actual', data: data }, { name: 'ideal Low', data: idealLow }, { name: 'ideal High', data: idealHigh }]
+	    } else {
+            	return [{ name: 'actual', data: data }]
+	   }
         },
         last() {
             if (this.temps == null) {
                 return ""
             } else {
                 // console.log(this.temps.length)
-                var lastEntry = this.temps[this.temps.length-1]
-                var temp = Math.round((this.degree == 'celsius'?lastEntry.temp:((lastEntry.temp*9/5)+32))*10)/10 + '\xB0'
-		var avg = Math.round(this.average*10)/10 + '\xB0'
+                var lastEntry = this.temps[this.temps.length - 1]
+                var temp = Math.round((this.degree == 'celsius' ? lastEntry.temp : ((lastEntry.temp * 9 / 5) + 32)) * 10) / 10 + '\xB0'
+                var avg = Math.round(this.average * 10) / 10 + '\xB0'
                 return temp + "(avg: " + avg + ") at " + this.format(lastEntry.when["$date"])
             }
         },
         min() {
-            return this.degree=='celsius'?0:32;
+            return this.degree == 'celsius' ? 0 : 32;
         },
         max() {
-            return this.degree=='celsius'?20:68;
+            return this.degree == 'celsius' ? 20 : 68;
         }
     }
 })
