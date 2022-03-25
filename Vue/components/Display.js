@@ -57,8 +57,8 @@ app.component('display', {
                     // console.log(item)
                     this.average += (this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32))
                     data[this.format(item.when["$date"])] = this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32)
-                    idealLow[this.format(item.when["$date"])] = this.degree == 'celsius' ? 12.78 : 55.0
-                    idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius' ? 15.0 : 59.0
+                    idealLow[this.format(item.when["$date"])] = this.degree == 'celsius' ? 18.89 : 66.0
+                    idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius' ? 16.67 : 62.0
                 }
                 console.log('recomputed average: ' + this.average + ', ' + this.temps.length + ', ' + (this.average/this.temps.length))
                 this.average /= this.temps.length
@@ -81,10 +81,10 @@ app.component('display', {
             }
         },
         min() {
-            return this.degree == 'celsius' ? 0 : 32;
+            return this.degree == 'celsius' ? 10 : 50;
         },
         max() {
-            return this.degree == 'celsius' ? 20 : 68;
+            return this.degree == 'celsius' ? 30 : 86;
         }
     }
 })
