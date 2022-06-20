@@ -9,15 +9,13 @@ app = Flask(__name__)
 
 cors = CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
-client = MongoClient('mongodb://192.168.1.20:27017/')
-db = client.wine
 
 @app.route('/')
 @cross_origin()
 def index():
     # print(request.args.get('range'))
     client = MongoClient('mongodb://localhost:27017/')
-    db = client.local 
+    db = client.wine 
     coll = db.temps
     switcher = {
         'all': timedelta(weeks = 52),
