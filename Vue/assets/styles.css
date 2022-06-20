@@ -19,6 +19,7 @@
       color: blanchedalmond;
 }
 .item-right {
+      padding: 4px;
       float: right;
       color: rgb(35, 54, 3);
       border: 1px solid rgb(36, 27, 13);

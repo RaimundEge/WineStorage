@@ -1,0 +1,14 @@
+[Unit]
+Description=Refrigerator Temperature
+After=network.target
+
+[Service]
+User=ege
+WorkingDirectory=/home/ege/WineStorage/REST
+ExecStart=/home/ege/WineStorage/REST/run
+StandardOutput=file:/home/ege/WineStorage/REST/logFile
+StandardError=file:/home/ege/WineStorage/REST/logFile
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

@@ -390,8 +390,8 @@ class Temper(object):
 
   def store(self, results):
     # print(results[0]['internal temperature'])
-    client = MongoClient('mongodb://localhost:27017/')
-    db = client.local 
+    client = MongoClient('mongodb://192.168.1.20:27017/')
+    db = client.wine 
     coll = db.temps
     coll.insert_one({"time": datetime.datetime.utcnow(), "value": results[0]['internal temperature'] })
        
