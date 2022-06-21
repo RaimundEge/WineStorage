@@ -20,7 +20,7 @@ app.component('display', {
                 &nbsp;&nbsp;&nbsp;&nbsp;Select degrees&nbsp;
                 <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
                 <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
-            <line-chart :data="data" :min="min" :max="max" :points="false" :round="1" :colors="['#FF0800', '#cbb', '#bbc']" class="chart" empty="loading data ..."></line-chart>
+            <line-chart :data="data" height="50vh" :min="min" :max="max" :points="false" :round="1" :colors="['#00FF00', '#0000FF', '#FF0000']" class="chart" empty="loading data ..."></line-chart>
          </div>`,
     data() {
         return {
@@ -34,9 +34,9 @@ app.component('display', {
     methods: {
         async getTemps() {
             NProgress.start()
-            var resp = await axios.get('http://192.168.1.22:5000/' + `?range=${this.range}`)
+            var resp = await axios.get('data/' + `?range=${this.range}`)
             this.temps = resp.data
-            // console.log(this.temps)
+            // console.log(this.temps.length)
             NProgress.done()
         },
         format(when) {
@@ -60,7 +60,7 @@ app.component('display', {
                     idealLow[this.format(item.when["$date"])] = this.degree == 'celsius' ? 16.67 : 62.0
                     idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius' ? 18.89 : 66.0
                 }
-                console.log('recomputed average: ' + this.average + ', ' + this.temps.length + ', ' + (this.average/this.temps.length))
+                // console.log('recomputed average: ' + this.average + ', ' + this.temps.length + ', ' + (this.average/this.temps.length))
                 this.average /= this.temps.length
             }
 	    if (this.range.includes('hour')) {
