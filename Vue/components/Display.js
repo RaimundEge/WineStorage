@@ -16,6 +16,7 @@ app.component('display', {
                     <option value="2day">last 48 hours</option>
                     <option value="week">last 7 days</option>
                     <option value="month">last 30 days</option>
+                    <option value="cold">Cold Room</option>
                 </select>         
                 &nbsp;&nbsp;&nbsp;&nbsp;Select degrees&nbsp;
                 <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
@@ -26,7 +27,7 @@ app.component('display', {
         return {
             temps: null,
             average: 0,
-            range: 'hour',
+            range: 'cold',
             oldRange: 'all',
             degree: 'fahrenheit'
         }
@@ -34,9 +35,11 @@ app.component('display', {
     methods: {
         async getTemps() {
             NProgress.start()
+            var range = (this.range=='cold')?'day':this.range
             var resp = await axios.get('data/' + `?range=${this.range}`)
+            // console.log(resp.data)
             this.temps = resp.data
-            // console.log(this.temps.length)
+            console.log("REST service returned: " + this.temps.length + " temperature records")
             NProgress.done()
         },
         format(when) {
@@ -53,24 +56,27 @@ app.component('display', {
                 this.oldRange = this.range
             } else {
                 this.average = 0;
-                for (var item of this.temps) {
-                    // console.log(item)
-                    this.average += (this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32))
-                    data[this.format(item.when["$date"])] = this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32)
-                    idealLow[this.format(item.when["$date"])] = this.degree == 'celsius' ? 16.67 : 62.0
-                    idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius' ? 18.89 : 66.0
+                // console.log(this.temps.length)
+                if (this.temps.length > 0) {
+                    for (var item of this.temps) {
+                        // console.log(item)
+                        this.average += (this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32))
+                        data[this.format(item.when["$date"])] = this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32)
+                        idealLow[this.format(item.when["$date"])] = this.degree == 'celsius' ? 16.67 : 62.0
+                        idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius' ? 18.89 : 66.0
+                    }
+                    // console.log('recomputed average: ' + this.average + ', ' + this.temps.length + ', ' + (this.average/this.temps.length))
+                    this.average /= this.temps.length
                 }
-                // console.log('recomputed average: ' + this.average + ', ' + this.temps.length + ', ' + (this.average/this.temps.length))
-                this.average /= this.temps.length
             }
-	    if (this.range.includes('hour')) {
-           	 return [{ name: 'actual', data: data }, { name: 'ideal Low', data: idealLow }, { name: 'ideal High', data: idealHigh }]
-	    } else {
-            	return [{ name: 'actual', data: data }]
-	   }
+            if (this.range.includes('hour')) {
+                return [{ name: 'actual', data: data }, { name: 'ideal Low', data: idealLow }, { name: 'ideal High', data: idealHigh }]
+            } else {
+                return [{ name: 'actual', data: data }]
+            }
         },
         last() {
-            if (this.temps == null) {
+            if (this.temps == null || this.temps.length == 0) {
                 return ""
             } else {
                 // console.log(this.temps.length)
@@ -84,7 +90,7 @@ app.component('display', {
             return this.degree == 'celsius' ? 10 : 50;
         },
         max() {
-            return this.degree == 'celsius' ? 30 : 86;
+            return this.degree == 'celsius' ? 38 : 100;
         }
     }
 })
