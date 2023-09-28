@@ -37,7 +37,7 @@ def index():
     # dbList = list(cursor)
     # t2 = time.perf_counter()
     # print(str(t2-t1) + ' seconds before dbList loop')
-    oList = [{"when": doc['time'], "temp": (doc['value']-1.7)} for doc in cursor]   
+    oList = [{"when": doc['time'], "temp": (doc['value'])} for doc in cursor]   
     # t3 = time.perf_counter()
     # print(str(t3-t2) + ' seconds after cursor loop')
     if len(oList) > 360:
