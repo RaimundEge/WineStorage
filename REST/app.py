@@ -16,7 +16,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 def index():
     # t0 = time.perf_counter()
     # print(request.args.get('range'))
-    client = MongoClient('mongodb://localhost:27017/')
+    client = MongoClient('mongodb://192.168.1.11:27017/')
     db = client.wine 
     coll = db.temps
     switcher = {

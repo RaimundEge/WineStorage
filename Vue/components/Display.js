@@ -36,7 +36,7 @@ app.component('display', {
         async getTemps() {
             NProgress.start()
             var range = (this.range=='cold')?'day':this.range
-            var resp = await axios.get('data/' + `?range=${this.range}`)
+            var resp = await axios.get('data/' + `?range=${range}`)
             // console.log(resp.data)
             this.temps = resp.data
             console.log("REST service returned: " + this.temps.length + " temperature records")
