@@ -21,7 +21,7 @@ app.component('display', {
                 &nbsp;&nbsp;&nbsp;&nbsp;Select degrees&nbsp;
                 <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
                 <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
-            <line-chart :data="data" height="50vh" :min="min" :max="max" :points="false" :round="1" :colors="['#00FF00', '#0000FF', '#FF0000']" class="chart" empty="loading data ..."></line-chart>
+            <line-chart :data="tempData" height="50vh" :min="min" :max="max" :points="false" :round="1" :colors="['#00FF00', '#0000FF', '#FF0000']" class="chart" empty="loading data ..."></line-chart>
          </div>`,
     data() {
         return {
@@ -47,32 +47,33 @@ app.component('display', {
         }
     },
     computed: {
-        data() {
-            var data = {}
+        tempData() {
+            var computedData = {}
             var idealLow = {}
             var idealHigh = {}
             if (this.temps == null || this.range !== this.oldRange) {
                 this.getTemps()
                 this.oldRange = this.range
             } else {
-                this.average = 0;
+                var average = 0;
                 // console.log(this.temps.length)
                 if (this.temps.length > 0) {
                     for (var item of this.temps) {
                         // console.log(item)
-                        this.average += (this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32))
-                        data[this.format(item.when["$date"])] = this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32)
+                        // console.log(this.temps.length)
+                        average += (this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32))
+                        computedData[this.format(item.when["$date"])] = this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32)
                         idealLow[this.format(item.when["$date"])] = this.degree == 'celsius' ? 16.67 : 62.0
                         idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius' ? 18.89 : 66.0
                     }
-                    // console.log('recomputed average: ' + this.average + ', ' + this.temps.length + ', ' + (this.average/this.temps.length))
-                    this.average /= this.temps.length
+                    // console.log('recomputed average: ' + average + ', ' + this.temps.length + ', ' + (average/this.temps.length))
+                    this.average = average/this.temps.length
                 }
             }
             if (this.range.includes('hour')) {
-                return [{ name: 'actual', data: data }, { name: 'ideal Low', data: idealLow }, { name: 'ideal High', data: idealHigh }]
+                return [{ name: 'actual', data: computedData }, { name: 'ideal Low', data: idealLow }, { name: 'ideal High', data: idealHigh }]
             } else {
-                return [{ name: 'actual', data: data }]
+                return [{ name: 'actual', data: computedData }]
             }
         },
         last() {
