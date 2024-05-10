@@ -61,10 +61,10 @@ app.component('display', {
                     for (var item of this.temps) {
                         // console.log(item)
                         // console.log(this.temps.length)
-                        average += (this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32))
-                        computedData[this.format(item.when["$date"])] = this.degree == 'celsius' ? item.temp : ((item.temp * 9 / 5) + 32)
-                        idealLow[this.format(item.when["$date"])] = this.degree == 'celsius' ? 16.67 : 62.0
-                        idealHigh[this.format(item.when["$date"])] = this.degree == 'celsius' ? 18.89 : 66.0
+                        average += (this.degree == 'celsius' ? item.value : ((item.value * 9 / 5) + 32))
+                        computedData[this.format(item.time)] = this.degree == 'celsius' ? item.value : ((item.value * 9 / 5) + 32)
+                        idealLow[this.format(item.time)] = this.degree == 'celsius' ? 16.67 : 62.0
+                        idealHigh[this.format(item.time)] = this.degree == 'celsius' ? 18.89 : 66.0
                     }
                     // console.log('recomputed average: ' + average + ', ' + this.temps.length + ', ' + (average/this.temps.length))
                     this.average = average/this.temps.length
@@ -81,10 +81,10 @@ app.component('display', {
                 return ""
             } else {
                 // console.log(this.temps.length)
-                var lastEntry = this.temps[this.temps.length - 1]
-                var temp = Math.round((this.degree == 'celsius' ? lastEntry.temp : ((lastEntry.temp * 9 / 5) + 32)) * 10) / 10 + '\xB0'
+                var lastEntry = this.temps[0]
+                var temp = Math.round((this.degree == 'celsius' ? lastEntry.value : ((lastEntry.value * 9 / 5) + 32)) * 10) / 10 + '\xB0'
                 var avg = Math.round(this.average * 10) / 10 + '\xB0'
-                return temp + "(avg: " + avg + ") at " + this.format(lastEntry.when["$date"])
+                return temp + "(avg: " + avg + ") at " + this.format(lastEntry.time)
             }
         },
         min() {
