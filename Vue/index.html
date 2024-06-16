@@ -19,6 +19,9 @@
 </head>
 
 <body>
+  <script src="https://unpkg.com/primevue@4.0.0-rc.1/umd/primevue.min.js"></script>
+  <script src="https://unpkg.com/@primevue/themes@4.0.0-rc.1/umd/aura.min.js"></script>
+
   <div id="app">
     <div class="nav-bar">
       <li class="banner">Temperature Readings in current Wine Storage</li>
@@ -36,6 +39,13 @@
   <!-- Mount App -->
   <script>
     app.use(VueChartkick)
+
+    app.use(PrimeVue.Config, {
+        theme: {
+            preset: PrimeVue.Themes.Aura
+        }
+      });
+      app.component('slider', PrimeVue.Slider);
     const mountedApp = app.mount('#app')   
   </script>
 </body>

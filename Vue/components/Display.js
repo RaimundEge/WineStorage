@@ -6,7 +6,8 @@ app.component('display', {
                 {{last}} &nbsp;
                 <button @click="getTemps()">Update</button>
             </div>
-            Show: <select v-model="range">
+            <div class=item-left>
+                Show: <select v-model="range">
                     <option value="all">all</option>
                     <option value="hour">last hour</option>
                     <option value="2hours">last 2 hours</option>
@@ -18,9 +19,11 @@ app.component('display', {
                     <option value="month">last 30 days</option>
                     <option value="cold">Cold Room</option>
                 </select>         
-                &nbsp;&nbsp;&nbsp;&nbsp;Select degrees&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;Select degrees:&nbsp;
                 <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
                 <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;Scale:&nbsp;&nbsp;<slider v-model="scale" :min="1" class="w-56"/>&nbsp;&nbsp;&nbsp;({{scale}}%)
+            </div>               
             <line-chart :data="tempData" height="50vh" :min="min" :max="max" :points="false" :round="1" :colors="['#00FF00', '#0000FF', '#FF0000']" class="chart" empty="loading data ..."></line-chart>
          </div>`,
     data() {
@@ -29,7 +32,8 @@ app.component('display', {
             average: 0,
             range: 'cold',
             oldRange: 'all',
-            degree: 'fahrenheit'
+            degree: 'fahrenheit',
+            scale: 100
         }
     },
     methods: {
@@ -55,10 +59,38 @@ app.component('display', {
                 this.getTemps()
                 this.oldRange = this.range
             } else {
+                var scaledTemps = [];
+                if (this.scale != 100) {
+                    var newLength = Math.round(this.temps.length * this.scale / 100);
+                    
+                    // fill resized target array with data "around" computed key
+                    var incr = this.temps.length / newLength;
+                    scaledTemps.push(this.temps[0]);
+                    for (let i=1; i<newLength-1; i++) {
+                        var oldIndex = Math.round(i * incr);
+                        var selectedData = { ...this.temps[oldIndex]};
+                        // compute average of adjacent data
+                        var count = 1;
+                        var sum = selectedData.value;
+                        if (oldIndex > 1) {
+                            sum += this.temps[oldIndex-1].value;
+                            count++;
+                        }
+                        if (oldIndex < oldIndex-2) {
+                            sum += this.temps[oldIndex+1].value;
+                            count++;
+                        }
+                        selectedData.value = sum / count;
+                        scaledTemps.push(selectedData);
+                    }
+                    scaledTemps.push(this.temps[this.temps.length-1]);
+                } else {
+                    scaledTemps = [...this.temps];
+                }
                 var average = 0;
-                // console.log(this.temps.length)
-                if (this.temps.length > 0) {
-                    for (var item of this.temps) {
+                console.log("scaledTemps length: " + scaledTemps.length)
+                if (scaledTemps.length > 0) {
+                    for (var item of scaledTemps) {
                         // console.log(item)
                         // console.log(this.temps.length)
                         average += (this.degree == 'celsius' ? item.value : ((item.value * 9 / 5) + 32))
@@ -67,7 +99,7 @@ app.component('display', {
                         idealHigh[this.format(item.time)] = this.degree == 'celsius' ? 18.89 : 66.0
                     }
                     // console.log('recomputed average: ' + average + ', ' + this.temps.length + ', ' + (average/this.temps.length))
-                    this.average = average/this.temps.length
+                    this.average = average/scaledTemps.length
                 }
             }
             if (this.range.includes('hour')) {
