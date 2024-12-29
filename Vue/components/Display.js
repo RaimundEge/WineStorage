@@ -43,7 +43,7 @@ app.component('display', {
             var resp = await axios.get('data/' + `?range=${range}`)
             // console.log(resp.data)
             this.temps = resp.data
-            console.log("REST service returned: " + this.temps.length + " temperature records")
+            console.log("REST backend returned: " + this.temps.length + " temperature records")
             NProgress.done()
         },
         format(when) {
