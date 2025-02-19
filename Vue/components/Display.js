@@ -23,6 +23,7 @@ app.component('display', {
                 <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
                 <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
                 &nbsp;&nbsp;&nbsp;&nbsp;Scale:&nbsp;&nbsp;<slider v-model="scale" :min="1" class="w-56"/>&nbsp;&nbsp;&nbsp;({{scale}}%)
+                &nbsp;&nbsp;&nbsp;&nbsp;Smoothness:&nbsp;&nbsp;<slider v-model="interval" :min="1" class="w-56"/>&nbsp;&nbsp;&nbsp;({{interval}})
             </div>               
             <line-chart :data="tempData" height="50vh" :min="min" :max="max" :points="false" :round="1" :colors="['#00FF00', '#0000FF', '#FF0000']" class="chart" empty="loading data ..."></line-chart>
         </div>`,
@@ -33,7 +34,8 @@ app.component('display', {
             range: 'cold',
             oldRange: 'all',
             degree: 'fahrenheit',
-            scale: 100
+            scale: 100,
+            interval: 1
         }
     },
     methods: {
@@ -60,35 +62,47 @@ app.component('display', {
                 this.oldRange = this.range
             } else {
                 var scaledTemps = [];
-                if (this.scale != 100) {
+                if (this.scale != 100 || this.interval != 1) {
                     var newLength = Math.round(this.temps.length * this.scale / 100);
-                    
-                    // fill resized target array with data "around" computed key
                     var incr = this.temps.length / newLength;
-                    scaledTemps.push(this.temps[0]);
-                    for (let i=1; i<newLength-1; i++) {
+                    // console.log("scaledTemps length: " + newLength + ", incr: " + incr);
+                    // new more dynamic style
+                    var step = this.interval;
+                    // console.log("scale: " + this.scale + ", step: " + step);
+                    for (let i=0; i<newLength; i++) {
                         var oldIndex = Math.round(i * incr);
+                        // console.log("averaging at: " + i + " from: " + oldIndex);
+                        var start = ((oldIndex-step)<0)?0:(oldIndex-step);
+                        var stop = ((oldIndex+step)>=this.temps.length)?this.temps.length-1:(oldIndex+step);
+                        // console.log("start: " + start + ", stop: " + stop);
                         var selectedData = { ...this.temps[oldIndex]};
-                        // compute average of adjacent data
-                        var count = 1;
-                        var sum = selectedData.value;
-                        if (oldIndex > 1) {
-                            sum += this.temps[oldIndex-1].value;
-                            count++;
-                        }
-                        if (oldIndex < oldIndex-2) {
-                            sum += this.temps[oldIndex+1].value;
-                            count++;
+                        var count = 0;
+                        var sum = 0;
+                        for (let j=start; j<=stop; j++) {
+                            sum += this.temps[j].value;
+                            count++
                         }
                         selectedData.value = sum / count;
+                        // console.log(selectedData);
+                        if (i!=0) {
+                            if (i==newLength-1) {
+                                selectedData.time = this.temps[stop].time;
+                            } else {
+                                var startTime = new Date(this.temps[start].time).getTime();
+                                var stopTime = new Date(this.temps[stop].time).getTime();
+                                selectedData.time = (startTime + stopTime)/2;
+                                
+                            }
+                        }
+                        // console.log("newTime: " + selectedData.time);
                         scaledTemps.push(selectedData);
                     }
-                    scaledTemps.push(this.temps[this.temps.length-1]);
+                    console.log("scaledTemps length: " + scaledTemps.length + ", interval: " + this.interval);
                 } else {
                     scaledTemps = [...this.temps];
                 }
                 var average = 0;
-                console.log("scaledTemps length: " + scaledTemps.length)
+                
                 if (scaledTemps.length > 0) {
                     for (var item of scaledTemps) {
                         // console.log(item)
