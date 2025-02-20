@@ -7,23 +7,31 @@ app.component('display', {
                 <button @click="getTemps()">Update</button>
             </div>
             <div class=item-left>
-                Show: <select v-model="range">
-                    <option value="all">all</option>
-                    <option value="hour">last hour</option>
-                    <option value="2hours">last 2 hours</option>
-                    <option value="6hours">last 6 hours</option>
-                    <option value="12hours">last 12 hours</option>
-                    <option value="day">last 24 hours</option>
-                    <option value="2day">last 48 hours</option>
-                    <option value="week">last 7 days</option>
-                    <option value="month">last 30 days</option>
-                    <option value="cold">Cold Room</option>
-                </select>         
-                &nbsp;&nbsp;&nbsp;&nbsp;Select degrees:&nbsp;
-                <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
-                <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
-                &nbsp;&nbsp;&nbsp;&nbsp;Scale:&nbsp;&nbsp;<slider v-model="scale" :min="1" class="w-56"/>&nbsp;&nbsp;&nbsp;({{scale}}%)
-                &nbsp;&nbsp;&nbsp;&nbsp;Smoothness:&nbsp;&nbsp;<slider v-model="interval" :min="1" class="w-56"/>&nbsp;&nbsp;&nbsp;({{interval}})
+                <div class=line-one>
+                    Show: <select v-model="range">
+                        <option value="all">all</option>
+                        <option value="hour">last hour</option>
+                        <option value="2hours">last 2 hours</option>
+                        <option value="6hours">last 6 hours</option>
+                        <option value="12hours">last 12 hours</option>
+                        <option value="day">last 24 hours</option>
+                        <option value="2day">last 48 hours</option>
+                        <option value="week">last 7 days</option>
+                        <option value="month">last 30 days</option>
+                        <option value="cold">Cold Room</option>
+                    </select> &nbsp; 
+                    <div class=item-radio>       
+                        Select degrees:&nbsp;
+                        <input type="radio" value="fahrenheit" v-model="degree"><label for="fahrenheit">Fahrenheit</label>
+                        <input type="radio" value="celsius" v-model="degree"><label for="celsius">Celsius</label>
+                    </div>
+                </div>
+                <div class=line-two>
+                    Scale:&nbsp;&nbsp;<slider v-model="scale" :min="1" class="w-56"/>&nbsp;&nbsp;&nbsp;({{scale}}%)
+                </div>
+                <div class=line-three>
+                    Smoothness:&nbsp;&nbsp;<slider v-model="interval" :min="1" class="w-56"/>&nbsp;&nbsp;&nbsp;({{interval}})
+                </div>
             </div>               
             <line-chart :data="tempData" height="50vh" :min="min" :max="max" :points="false" :round="1" :colors="['#00FF00', '#0000FF', '#FF0000']" class="chart" empty="loading data ..."></line-chart>
         </div>`,

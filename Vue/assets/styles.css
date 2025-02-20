@@ -25,7 +25,7 @@
       border: 1px solid rgb(36, 27, 13);
 }
 .item-left {
-      display: inline-flex
+      display: flow
 }
 .w-56 {
       width: 200px;
@@ -41,4 +41,9 @@
 .content {
       position: relative;
       top: 50px;
+}
+.line-two , .line-three , .item-radio {
+      display: inline-flex;
+      align-self: end;
+      padding-right: 2em;
 }
