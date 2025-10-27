@@ -27,12 +27,39 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist
 ;
 const client = new __TURBOPACK__imported__module__$5b$externals$5d2f$mongodb__$5b$external$5d$__$28$mongodb$2c$__cjs$29$__["MongoClient"]("mongodb://blitz:27017");
 let db = null;
-let range = "6hours";
+let range = "day";
 let degree = "fahrenheit";
+let temps = [];
 async function connect() {
     await client.connect();
     db = client.db("wine");
     console.log("Connected to MongoDB");
+}
+function halfSize(rawTemps) {
+    console.log('starting length: ', rawTemps.length);
+    var newTemps = [];
+    var prevTime = '';
+    var prevItem = null;
+    for (var item of rawTemps){
+        if (prevTime === '') {
+            prevItem = item;
+            prevTime = item.time;
+        } else {
+            var d1msecs = prevItem.time.getTime();
+            var d2msecs = item.time.getTime();
+            var avgTime = (d1msecs + d2msecs) / 2;
+            var result = new Date(avgTime);
+            var temp = (prevItem.value + item.value) / 2;
+            newTemps.push({
+                _id: item._id,
+                time: result,
+                value: temp
+            });
+            prevTime = '';
+        }
+    }
+    console.log('new length: ', newTemps.length);
+    return newTemps;
 }
 async function getTemps() {
     if (!db) {
@@ -87,8 +114,12 @@ async function getTemps() {
             ]
         ]
     }).toArray();
-    let temps = [];
+    temps = [];
+    while(rawTemps.length > 4000){
+        rawTemps = halfSize(rawTemps);
+    }
     rawTemps.forEach((doc)=>{
+        // console.log('time: ', doc.time.toISOString(), doc.value);
         doc.time = doc.time.toISOString();
         temps.push({
             time: doc.time,
@@ -96,7 +127,7 @@ async function getTemps() {
         });
     });
     // console.log(temps)
-    console.log("Fetched ", temps.length, "records");
+    console.log("Sending ", temps.length, "records");
     return {
         temps: temps,
         degree: degree,

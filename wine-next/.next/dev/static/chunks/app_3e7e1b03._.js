@@ -42,7 +42,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$data$3a$5b08fd__$5b$a
 'use client';
 ;
 ;
-function Select() {
+function Select({ data }) {
     const handleSelect = (event)=>{
         console.log('Selected range:', event.target.value);
         (0, __TURBOPACK__imported__module__$5b$project$5d2f$app$2f$data$3a$31f4fd__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$text$2f$javascript$3e$__["setRange"])(event.target.value);
@@ -53,15 +53,16 @@ function Select() {
     }
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "line-one",
+            className: "flex flex-row",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
                     children: [
-                        "Show:",
+                        "Show:  ",
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
                             name: "range",
-                            defaultValue: "day",
+                            defaultValue: data.range,
                             onChange: handleSelect,
+                            className: "border border-blue-500 text-xs",
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
                                     value: "all",
@@ -155,13 +156,13 @@ function Select() {
                     lineNumber: 18,
                     columnNumber: 17
                 }, this),
-                " ",
+                "  ",
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "item-radio",
                     onChange: handleRadio,
                     children: [
                         "Select degrees: ",
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                            className: "text-xs",
                             children: [
                                 " ",
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -172,7 +173,7 @@ function Select() {
                                 }, void 0, false, {
                                     fileName: "[project]/app/select.tsx",
                                     lineNumber: 34,
-                                    columnNumber: 29
+                                    columnNumber: 49
                                 }, this),
                                 " Fahrenheit"
                             ]
@@ -182,6 +183,7 @@ function Select() {
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
+                            className: "text-xs",
                             children: [
                                 " ",
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -191,7 +193,7 @@ function Select() {
                                 }, void 0, false, {
                                     fileName: "[project]/app/select.tsx",
                                     lineNumber: 35,
-                                    columnNumber: 29
+                                    columnNumber: 49
                                 }, this),
                                 " Celsius"
                             ]
@@ -275,12 +277,13 @@ function Update({ data }) {
         });
     };
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
+        className: "justify-self-end",
         children: [
             last(),
-            " ",
+            "  ",
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                 onClick: handleClick,
-                className: "bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded",
+                className: "bg-transparent px-1 text-blue-700 text-xs border border-blue-500",
                 children: "Update"
             }, void 0, false, {
                 fileName: "[project]/app/update.tsx",

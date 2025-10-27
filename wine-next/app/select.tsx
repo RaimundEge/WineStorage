@@ -2,7 +2,7 @@
 
 import { setRange, setDegree } from "./actions";
 
-export default function Select() {
+export default function Select({ data }: { data: {temps: { time: string; temp: number }[], degree: string, range: string }}) {
     
     const handleSelect = (event: any) => {
         console.log('Selected range:', event.target.value);
@@ -14,9 +14,9 @@ export default function Select() {
     }
     return (
         <main>
-            <div className="line-one">
-                <label>Show:
-                    <select name="range" defaultValue="day" onChange={handleSelect}>
+            <div className="flex flex-row">
+                <label>Show: &nbsp;
+                    <select name="range" defaultValue={data.range} onChange={handleSelect} className="border border-blue-500 text-xs">
                         <option value="all">all</option>
                         <option value="hour">last hour</option>
                         <option value="2hours">last 2 hours</option>
@@ -28,11 +28,11 @@ export default function Select() {
                         <option value="month">last 30 days</option>
                         <option value="day">Cold Room</option>
                     </select>
-                </label>&nbsp;
-                <div className="item-radio" onChange={handleRadio}>
+                </label>&nbsp;&nbsp;
+                <div onChange={handleRadio}>
                     Select degrees:&nbsp;
-                    <label> <input type="radio" value="fahrenheit" name="degree" defaultChecked={true} /> Fahrenheit</label>
-                    <label> <input type="radio" value="celsius" name="degree" /> Celsius</label>
+                    <label className="text-xs"> <input type="radio" value="fahrenheit" name="degree" defaultChecked={data.degree=="fahrenheit"} /> Fahrenheit</label>
+                    <label className="text-xs"> <input type="radio" value="celsius" name="degree" defaultChecked={data.degree=="celsius"}/> Celsius</label>
                 </div>
             </div>
         </main>

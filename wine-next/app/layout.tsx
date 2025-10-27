@@ -28,12 +28,12 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <div className="grid min-h-[100dvh] grid-rows-[auto_1fr_auto]">
-          <header className='bg-green-600 text-white p-3 text-left text-2xl font-bold'>
+          <header className='bg-gradient-to-r from-green-500 to-green-300 text-white p-3 text-left text-2xl font-bold'>
             Wine Storage Temperature
           </header>
           {children}
           <footer>
-            <div className='bg-green-600 text-white p-2 text-center'>
+            <div className='bg-gradient-to-r from-green-500 to-green-300 text-white p-2 text-center'>
               &copy; 2025 Lazy Acres Vineyard
             </div>
           </footer>

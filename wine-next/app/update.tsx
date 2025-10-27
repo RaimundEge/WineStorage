@@ -26,9 +26,9 @@ export default function Update({ data }: { data: {temps: { time: string; temp: n
     };
 
     return (
-        <main>
-            { last() }&nbsp;
-            <button onClick={handleClick} className="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">
+        <main className="justify-self-end">
+            { last() }&nbsp;&nbsp;
+            <button onClick={handleClick} className="bg-transparent px-1 text-blue-700 text-xs border border-blue-500">
                 Update
             </button>
         </main>

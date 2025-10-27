@@ -8,8 +8,11 @@ export default async function Home() {
 
   return (
     <main className='container mx-auto p-2'>
-      <Select /><Update data={data} />
-      <Chart data={data}/>
+      <div className="grid grid-cols-2 text-sm">
+        <Select data={data} />
+        <Update data={data} />
+      </div>
+      <Chart data={data} />
     </main>
 
   );

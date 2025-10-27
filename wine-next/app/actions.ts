@@ -6,13 +6,14 @@ import { revalidatePath } from "next/cache";
 
 const client = new mongoDB.MongoClient("mongodb://blitz:27017");
 let db: mongoDB.Db | null = null;
-let range: string = "6hours";
+let range: string = "day";
 let degree: string = "fahrenheit";
 
 interface Item {
-  time: string;
-  temp: number;
+    time: string;
+    temp: number;
 }
+let temps: Item[] = [];
 
 async function connect() {
     await client.connect();
@@ -20,10 +21,33 @@ async function connect() {
     console.log("Connected to MongoDB");
 }
 
+function halfSize(rawTemps: mongoDB.WithId<mongoDB.BSON.Document>[]): mongoDB.WithId<mongoDB.BSON.Document>[] {
+    console.log('starting length: ', rawTemps.length);
+    var newTemps: mongoDB.WithId<mongoDB.BSON.Document>[] = [];
+    var prevTime = '';
+    var prevItem: mongoDB.WithId<mongoDB.BSON.Document> | null = null;
+    for (var item of rawTemps) {
+        if (prevTime === '') {
+            prevItem = item;
+            prevTime = item.time;
+        } else {
+            var d1msecs = (prevItem!.time as Date).getTime();
+            var d2msecs = (item.time as Date).getTime();
+            var avgTime = (d1msecs + d2msecs) / 2;
+            var result = new Date(avgTime);
+            var temp = (prevItem!.value + item.value) / 2;
+            newTemps.push({ _id: item._id, time: result, value: temp });
+            prevTime = '';
+        }
+    }
+    console.log('new length: ', newTemps.length);
+    return newTemps;
+}
+
 export async function getTemps() {
     if (!db) {
         await connect();
-    }   
+    }
     var delta = 0;
     switch (range) {
         case "all": delta = 24 * 365; break;
@@ -42,14 +66,18 @@ export async function getTemps() {
     var search = { "time": { $gt: compare } };
     // console.log(search);
     var rawTemps = await db!.collection("temps").find(search, { sort: [["time", "desc"]] }).toArray();
-    let temps: Item[] = [];
+    temps = [];
+    while (rawTemps.length > 4000) {
+        rawTemps = halfSize(rawTemps);
+    }
     rawTemps.forEach(doc => {
-        doc.time = (doc.time as Date).toISOString();
-        temps.push({time: doc.time, temp: degree == 'celsius' ? doc.value : ((doc.value * 9 / 5) + 32)});
+        // console.log('time: ', doc.time.toISOString(), doc.value);
+        doc.time = doc.time.toISOString();
+        temps.push({ time: doc.time, temp: degree == 'celsius' ? doc.value : ((doc.value * 9 / 5) + 32) });
     });
     // console.log(temps)
-    console.log("Fetched ", temps.length, "records");
-    return {temps: temps, degree: degree, range: range};
+    console.log("Sending ", temps.length, "records");
+    return { temps: temps, degree: degree, range: range };
 }
 
 export async function setRange(newRange: string) {
