@@ -33,13 +33,14 @@ let temps = [];
 async function connect() {
     await client.connect();
     db = client.db("wine");
-    console.log("Connected to MongoDB");
+// console.log("Connected to MongoDB");
 }
 function halfSize(rawTemps) {
-    console.log('starting length: ', rawTemps.length);
+    // console.log('starting length: ', rawTemps.length);
     var newTemps = [];
     var prevTime = '';
     var prevItem = null;
+    newTemps.push(rawTemps[0]);
     for (var item of rawTemps){
         if (prevTime === '') {
             prevItem = item;
@@ -58,7 +59,7 @@ function halfSize(rawTemps) {
             prevTime = '';
         }
     }
-    console.log('new length: ', newTemps.length);
+    // console.log('new length: ', newTemps.length);
     return newTemps;
 }
 async function getTemps() {
@@ -127,7 +128,7 @@ async function getTemps() {
         });
     });
     // console.log(temps)
-    console.log("Sending ", temps.length, "records");
+    // console.log("Sending ", temps.length, "records");
     return {
         temps: temps,
         degree: degree,
@@ -136,12 +137,12 @@ async function getTemps() {
 }
 async function setRange(newRange) {
     range = newRange;
-    console.log("Range set to ", range);
+    // console.log("Range set to ", range);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$cache$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["revalidatePath"])("/");
 }
 async function setDegree(newDegree) {
     degree = newDegree;
-    console.log("Degree set to ", degree);
+    // console.log("Degree set to ", degree);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$cache$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["revalidatePath"])("/");
 }
 ;

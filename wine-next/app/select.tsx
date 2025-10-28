@@ -5,11 +5,11 @@ import { setRange, setDegree } from "./actions";
 export default function Select({ data }: { data: {temps: { time: string; temp: number }[], degree: string, range: string }}) {
     
     const handleSelect = (event: any) => {
-        console.log('Selected range:', event.target.value);
+        // console.log('Selected range:', event.target.value);
         setRange(event.target.value);
     }
     function handleRadio(event: any) {
-        console.log('Selected degree:', event.target.value);
+        // console.log('Selected degree:', event.target.value);
         setDegree(event.target.value);
     }
     return (
@@ -17,7 +17,7 @@ export default function Select({ data }: { data: {temps: { time: string; temp: n
             <div className="flex flex-row">
                 <label>Show: &nbsp;
                     <select name="range" defaultValue={data.range} onChange={handleSelect} className="border border-blue-500 text-xs">
-                        <option value="all">all</option>
+                        <option value="day">Cold Room</option>
                         <option value="hour">last hour</option>
                         <option value="2hours">last 2 hours</option>
                         <option value="6hours">last 6 hours</option>
@@ -26,7 +26,7 @@ export default function Select({ data }: { data: {temps: { time: string; temp: n
                         <option value="2day">last 48 hours</option>
                         <option value="week">last 7 days</option>
                         <option value="month">last 30 days</option>
-                        <option value="day">Cold Room</option>
+                        <option value="all">all</option>
                     </select>
                 </label>&nbsp;&nbsp;
                 <div onChange={handleRadio}>

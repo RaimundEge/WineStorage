@@ -7,10 +7,10 @@ if (!Array.isArray(globalThis.TURBOPACK)) {
     return;
 }
 
-const CHUNK_BASE_PATH = "/wine/_next/";
+const CHUNK_BASE_PATH = "/_next/";
 const CHUNK_SUFFIX_PATH = "";
 const RELATIVE_ROOT_PATH = "/ROOT";
-const RUNTIME_PUBLIC_PATH = "/wine/_next/";
+const RUNTIME_PUBLIC_PATH = "/_next/";
 /**
  * This file contains runtime types and functions that are shared between all
  * TurboPack ECMAScript runtimes.

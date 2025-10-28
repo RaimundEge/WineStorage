@@ -18,14 +18,15 @@ let temps: Item[] = [];
 async function connect() {
     await client.connect();
     db = client.db("wine");
-    console.log("Connected to MongoDB");
+    // console.log("Connected to MongoDB");
 }
 
 function halfSize(rawTemps: mongoDB.WithId<mongoDB.BSON.Document>[]): mongoDB.WithId<mongoDB.BSON.Document>[] {
-    console.log('starting length: ', rawTemps.length);
+    // console.log('starting length: ', rawTemps.length);
     var newTemps: mongoDB.WithId<mongoDB.BSON.Document>[] = [];
     var prevTime = '';
     var prevItem: mongoDB.WithId<mongoDB.BSON.Document> | null = null;
+    newTemps.push(rawTemps[0]);
     for (var item of rawTemps) {
         if (prevTime === '') {
             prevItem = item;
@@ -40,7 +41,7 @@ function halfSize(rawTemps: mongoDB.WithId<mongoDB.BSON.Document>[]): mongoDB.Wi
             prevTime = '';
         }
     }
-    console.log('new length: ', newTemps.length);
+    // console.log('new length: ', newTemps.length);
     return newTemps;
 }
 
@@ -76,17 +77,17 @@ export async function getTemps() {
         temps.push({ time: doc.time, temp: degree == 'celsius' ? doc.value : ((doc.value * 9 / 5) + 32) });
     });
     // console.log(temps)
-    console.log("Sending ", temps.length, "records");
+    // console.log("Sending ", temps.length, "records");
     return { temps: temps, degree: degree, range: range };
 }
 
 export async function setRange(newRange: string) {
     range = newRange;
-    console.log("Range set to ", range);
+    // console.log("Range set to ", range);
     revalidatePath("/");
 }
 export async function setDegree(newDegree: string) {
     degree = newDegree;
-    console.log("Degree set to ", degree);
+    // console.log("Degree set to ", degree);
     revalidatePath("/");
 }
