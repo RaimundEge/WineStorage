@@ -16,7 +16,7 @@ sqlite_cursor = sqlite_conn.cursor()
 for document in mongo_collection.find():
     sqlite_cursor.execute('''
         INSERT INTO Temps (value,date)
-        VALUES (?, ?, ?, ?)
+        VALUES (?, ?)
     ''', (
         
         document.get('value'),
