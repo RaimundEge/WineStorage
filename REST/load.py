@@ -7,7 +7,7 @@ def load_mongodb_to_sqlite(mongo_uri, mongo_db_name, mongo_collection_name, sqli
     # Connect to MongoDB
     mongo_client = MongoClient('mongodb://blitz:27017/')
     mongo_db = mongo_client['wine']
-    mongo_collection = mongo_db[m'temps']
+    mongo_collection = mongo_db['temps']
 
     # Connect to SQLite
     sqlite_conn = sqlite3.connect('../temper//winetemps.db')
