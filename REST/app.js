@@ -2,7 +2,7 @@ const express = require('express')
 const app = express();
 const PORT = process.env.PORT || 3000;
 const sqlite3 = require("sqlite")
-const db = new sqlite3.Database("../temper//winetemps.db");
+const db = new sqlite3.Database("../temper/winetemps.db");
 
 app.get('/', (req, res) => {
     const { range } = req.query;
