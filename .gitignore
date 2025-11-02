@@ -2,6 +2,7 @@
 REST/logFile
 REST/__pycache__/
 node_modules
+*.db
 /.pnp
 .pnp.*
 .yarn/*
