@@ -9,7 +9,7 @@ mongo_db = mongo_client['wine']
 mongo_collection = mongo_db['temps']
 
 # Connect to SQLite
-sqlite_conn = sqlite3.connect('../temper//winetemps.db')
+sqlite_conn = sqlite3.connect('../temper/winetemps.db')
 sqlite_cursor = sqlite_conn.cursor()
 
 # Load data from MongoDB and insert into SQLite

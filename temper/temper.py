@@ -394,7 +394,14 @@ class Temper(object):
     db = client.wine 
     coll = db.temps
     coll.insert_one({"time": datetime.datetime.utcnow(), "value": results[0]['internal temperature'] })
-       
+    # insert into sqlite db
+    # Connect to SQLite
+    sqlite_conn = sqlite3.connect('./winetemps.db')
+    sqlite_cursor = sqlite_conn.cursor()
+    sqlite_cursor.execute('INSERT INTO Temps (value) VALUES (?)', (results[0]['internal temperature'],))
+    sqlite_conn.commit()
+    sqlite_conn.close()
+
   def main(self):
     '''An example 'main' entry point that can be used to make temper.py a
     standalone program.
