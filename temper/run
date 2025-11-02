@@ -1,4 +1,4 @@
 #! /bin/bash
-DIR=/home/ege/WineStorage/temper
-LOGFILE=$DIR/log.txt
-python3 $DIR/temper.py >& $LOGFILE
+cd /home/ege/WineStorage/temper
+LOGFILE=log.txt
+python3 temper.py >& $LOGFILE
