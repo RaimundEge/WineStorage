@@ -2,8 +2,8 @@ import express from "express";
 import cors from "cors";
 const app = express();
 const PORT = process.env.PORT || 3000;
-// import sqlite3 from "sqlite3";
-// const db = new sqlite3.Database("../temper//winetemps.db");
+import sqlite3 from "sqlite3";
+const db = new sqlite3.Database("../temper//winetemps.db");
 
 app.use(cors());
 
@@ -18,6 +18,7 @@ app.get('/', (req, res) => {
         case '6hours': delta = 6; break;
         case '12hours': delta = 12; break;
         case 'day': delta = 24; break;
+        case 'cold': delta = 24; break;
         case '2day': delta = 48; break;
         case 'week': delta = 7 * 24; break;
         case 'month': delta = 30 * 24; break;
