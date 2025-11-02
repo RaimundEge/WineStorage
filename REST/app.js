@@ -1,11 +1,8 @@
-import express from "express";
-import cors from "cors";
+const express = require('express')
 const app = express();
 const PORT = process.env.PORT || 3000;
-import sqlite3 from "sqlite3";
+const sqlite3 = require("sqlite")
 const db = new sqlite3.Database("../temper//winetemps.db");
-
-app.use(cors());
 
 app.get('/', (req, res) => {
     const { range } = req.query;
@@ -27,7 +24,7 @@ app.get('/', (req, res) => {
     let query = `SELECT * FROM table_name WHERE date >= ${since};`;
     console.log(`Constructed query: ${query}`);
 
-    db.get(query, params, (err, rows) => {
+    db.all(query, [], (err, rows) => {
         if (err) {
             res.status(500).send(err.message);
             return;
