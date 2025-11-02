@@ -1,7 +1,7 @@
 const express = require('express')
 const app = express();
 const PORT = process.env.PORT || 3000;
-const sqlite3 = require("sqlite")
+const sqlite3 = require("sqlite3")
 const db = new sqlite3.Database("../temper/winetemps.db");
 
 app.get('/', (req, res) => {
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
         case 'month': delta = 30 * 24; break;
     }
     let since= `date('now', '-${delta} hours')`;
-    let query = `SELECT * FROM table_name WHERE date >= ${since};`;
+    let query = `SELECT * FROM Temps WHERE date >= ${since};`;
     console.log(`Constructed query: ${query}`);
 
     db.all(query, [], (err, rows) => {
