@@ -31,6 +31,7 @@ import struct
 import sys
 import datetime
 from pymongo import MongoClient
+import sqlite3
 
 # Non-standard modules
 try:
