@@ -12,6 +12,16 @@ mongo_collection = mongo_db['temps']
 sqlite_conn = sqlite3.connect('../temper/winetemps.db')
 sqlite_cursor = sqlite_conn.cursor()
 
+# Create table if not exists
+sqlite_cursor.execute('DROP TABLE IF EXISTS Temps')
+sqlite_cursor.execute('''
+    CREATE TABLE Temps (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        value REAL,
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+''')
+
 # Load data from MongoDB and insert into SQLite
 for document in mongo_collection.find():
     sqlite_cursor.execute('''
