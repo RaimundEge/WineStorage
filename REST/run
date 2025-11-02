@@ -1,0 +1,4 @@
+#! /bin/bash
+LOGFILE=/home/ege/WineStorage/REST/log.txt
+rm -rf $LOGFILE
+node app.js >& $LOGFILE

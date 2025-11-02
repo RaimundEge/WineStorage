@@ -1,0 +1,12 @@
+[Unit]
+Description=Wineroom Temperatures
+
+[Service]
+Type=simple
+User=ege
+WorkingDirectory=/home/ege/WineStorage/REST
+ExecStart=/home/ege/WineStorage/REST/run
+Restart=always
+
+[Install]
+WantedBy=network-online.target

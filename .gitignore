@@ -2,7 +2,7 @@
 REST/logFile
 REST/__pycache__/
 node_modules
-temper/*.db
+*.db
 /.pnp
 .pnp.*
 .yarn/*
