@@ -29,7 +29,9 @@ app.get('/', (req, res) => {
             res.status(500).send(err.message);
             // convert to local time
             rows = rows.map(row => {
+                console.log(`Original date: ${row.date}`);
                 row.date = new Date(row.date + 'Z').toLocaleString();
+                console.log(`Converted date: ${row.date}`);
                 return row;
             });
             return;
