@@ -34,7 +34,7 @@ app.get('/', (req, res) => {
         // convert to local time
         rows = rows.map(row => {
             console.log(`Original date: ${row.date}`);
-            row.date = new Date(row.date + 'Z').toLocaleString();
+            row.date = new Date(row.date + 'Z').toString();
             console.log(`Converted date: ${row.date}`);
             return row;
         });
