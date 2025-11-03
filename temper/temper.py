@@ -30,7 +30,7 @@ import select
 import struct
 import sys
 import datetime
-from pymongo import MongoClient
+# from pymongo import MongoClient
 import sqlite3
 
 # Non-standard modules
@@ -391,10 +391,10 @@ class Temper(object):
 
   def store(self, results):
     # print(results[0]['internal temperature'])
-    client = MongoClient('mongodb://blitz:27017/')
-    db = client.wine 
-    coll = db.temps
-    coll.insert_one({"time": datetime.datetime.utcnow(), "value": results[0]['internal temperature'] })
+    # client = MongoClient('mongodb://blitz:27017/')
+    # db = client.wine 
+    # coll = db.temps
+    # coll.insert_one({"time": datetime.datetime.utcnow(), "value": results[0]['internal temperature'] })
     # insert into sqlite db
     # Connect to SQLite
     sqlite_conn = sqlite3.connect('./winetemps.db')
