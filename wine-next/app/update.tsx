@@ -1,6 +1,6 @@
 'use client';
 
-import { getTemps } from "./actions";
+import { getTemps, update } from "./actions";
 
 export default function Update({ data }: { data: { temps: { time: string; temp: number }[], degree: string } }) {
     function last() {
@@ -20,10 +20,8 @@ export default function Update({ data }: { data: { temps: { time: string; temp: 
         }
     }
     const handleClick = () => {
-        getTemps().then((temps) => {
-        //    console.log('Fetched updated temps:', temps.temps.length);
-            data = temps;
-            window.location.reload();
+        update().then(() => {
+            console.log('Ftrigger update');
         });
     };
 
