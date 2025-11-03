@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
         case 'week': delta = 7 * 24; break;
         case 'month': delta = 30 * 24; break;
     }
-    let since= `date('now', '-${delta} hours')`;
+    let since= `datetime('now', '-${delta} hours')`;
     let query = `SELECT * FROM Temps WHERE date >= ${since};`;
     console.log(`Constructed query: ${query}`);
 
