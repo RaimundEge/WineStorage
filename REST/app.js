@@ -27,6 +27,11 @@ app.get('/', (req, res) => {
     db.all(query, [], (err, rows) => {
         if (err) {
             res.status(500).send(err.message);
+            // convert to local time
+            rows = rows.map(row => {
+                row.date = new Date(row.date + 'Z').toLocaleString();
+                return row;
+            });
             return;
         }
         console.log(`Retrieved ${rows.length} rows`);
