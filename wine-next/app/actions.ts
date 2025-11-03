@@ -3,9 +3,12 @@
 import * as mongoDB from "mongodb";
 import { sub } from 'date-fns';
 import { revalidatePath } from "next/cache";
+import axios from "axios";
 
+// now longer via mongodb, but kept for reference
 const client = new mongoDB.MongoClient("mongodb://blitz:27017");
 let db: mongoDB.Db | null = null;
+// REST access to pioneer wine cellar temperature logger
 let range: string = "day";
 let degree: string = "fahrenheit";
 
@@ -46,6 +49,18 @@ function halfSize(rawTemps: mongoDB.WithId<mongoDB.BSON.Document>[]): mongoDB.Wi
 }
 
 export async function getTemps() {
+    // call pione REST API for sqlite temp data
+    var resp = await axios.get('http://pione:3000/' + `?range=${range}`)
+    // console.log(resp.data);
+    var temps: Item[] = [];
+    resp.data.forEach(doc => {
+        // var dateString = doc.date.toISOString();
+        // console.log('at: ', doc.date, ': ', doc.value);
+        temps.push({ time: doc.date, temp: degree == 'celsius' ? doc.value : ((doc.value * 9 / 5) + 32) });
+    });
+    return { temps: temps, degree: degree, range: range };
+}
+export async function getTempsMongo() {
     if (!db) {
         await connect();
     }
@@ -66,6 +81,7 @@ export async function getTemps() {
     compare = sub(compare, { hours: delta });
     var search = { "time": { $gt: compare } };
     // console.log(search);
+
     var rawTemps = await db!.collection("temps").find(search, { sort: [["time", "desc"]] }).toArray();
     temps = [];
     while (rawTemps.length > 4000) {
@@ -90,4 +106,16 @@ export async function setDegree(newDegree: string) {
     degree = newDegree;
     // console.log("Degree set to ", degree);
     revalidatePath("/");
+}
+export async function update() {
+    // check whether we need to fetch new data
+    if (!db) {
+        await connect();
+    }
+    var lastEntry = await db!.collection("temps").findOne({}, { sort: [["time", -1]] });
+    var lastTime = lastEntry ? lastEntry.time : new Date(0);
+    var now = new Date();
+    var diffMins = (now.getTime() - lastTime.getTime()) / (1000 * 60);
+    console.log('Minutes since last entry: ', diffMins);
+
 }
