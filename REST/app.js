@@ -33,9 +33,9 @@ app.get('/', (req, res) => {
         console.log(`Retrieved ${rows.length} rows`);
         // convert to local time
         rows = rows.map(row => {
-            console.log(`Original date: ${row.date}`);
+            // console.log(`Original date: ${row.date}`);
             row.date = new Date(row.date + 'Z').toString();
-            console.log(`Converted date: ${row.date}`);
+            // console.log(`Converted date: ${row.date}`);
             return row;
         });
         res.json(rows);
