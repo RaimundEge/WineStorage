@@ -20,27 +20,28 @@ app.get('/', (req, res) => {
         case 'week': delta = 7 * 24; break;
         case 'month': delta = 30 * 24; break;
     }
-    let since= `datetime('now', '-${delta} hours')`;
+    let since = `datetime('now', '-${delta} hours')`;
     let query = `SELECT * FROM Temps WHERE date >= ${since};`;
     console.log(`Constructed query: ${query}`);
 
     db.all(query, [], (err, rows) => {
         if (err) {
             res.status(500).send(err.message);
-            // convert to local time
-            rows = rows.map(row => {
-                console.log(`Original date: ${row.date}`);
-                row.date = new Date(row.date + 'Z').toLocaleString();
-                console.log(`Converted date: ${row.date}`);
-                return row;
-            });
+
             return;
         }
         console.log(`Retrieved ${rows.length} rows`);
+        // convert to local time
+        rows = rows.map(row => {
+            console.log(`Original date: ${row.date}`);
+            row.date = new Date(row.date + 'Z').toLocaleString();
+            console.log(`Converted date: ${row.date}`);
+            return row;
+        });
         res.json(rows);
     });
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+    console.log(`Server is running on port ${PORT}`);
 });
