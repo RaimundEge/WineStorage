@@ -29,6 +29,7 @@ app.get('/', (req, res) => {
             res.status(500).send(err.message);
             return;
         }
+        console.log(`Retrieved ${rows.length} rows`);
         res.json(rows);
     });
 });
