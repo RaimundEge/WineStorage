@@ -8,7 +8,7 @@ export default function Update({ data }: { data: { temps: { time: string; temp: 
             return ""
         } else {
             // console.log(this.temps.length)
-            var lastEntry = data.temps[0]
+            var lastEntry = data.temps[data.temps.length - 1];
             var sum = 0;
             for (var item of data.temps) {
                 sum += item.temp;

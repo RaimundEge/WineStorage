@@ -53,8 +53,7 @@ export async function getTemps() {
     var resp = await axios.get('http://pione:3000/' + `?range=${range}`)
     // console.log(resp.data);
     var temps: Item[] = [];
-    resp.data.forEach(doc => {
-        // var dateString = doc.date.toISOString();
+    resp.data.forEach((doc: any) => {
         // console.log('at: ', doc.date, ': ', doc.value);
         temps.push({ time: doc.date, temp: degree == 'celsius' ? doc.value : ((doc.value * 9 / 5) + 32) });
     });

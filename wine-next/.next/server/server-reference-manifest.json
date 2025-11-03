@@ -30,6 +30,21 @@
       "filename": "app/actions.ts",
       "exportedName": "setDegree"
     },
+    "00149ee9bc571d18f60eebbf2639fb53d85ef8d850": {
+      "workers": {
+        "app/page": {
+          "moduleId": 57526,
+          "async": false,
+          "exportedName": "update",
+          "filename": "app/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "filename": "app/actions.ts",
+      "exportedName": "update"
+    },
     "00042e343e88ef550f30461914ac672c43618268f0": {
       "workers": {
         "app/page": {
@@ -44,6 +59,21 @@
       },
       "filename": "app/actions.ts",
       "exportedName": "getTemps"
+    },
+    "001cff0380033f3038d6446c14ff333583fed4b1c1": {
+      "workers": {
+        "app/page": {
+          "moduleId": 57526,
+          "async": false,
+          "exportedName": "getTempsMongo",
+          "filename": "app/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "rsc"
+      },
+      "filename": "app/actions.ts",
+      "exportedName": "getTempsMongo"
     }
   },
   "edge": {},

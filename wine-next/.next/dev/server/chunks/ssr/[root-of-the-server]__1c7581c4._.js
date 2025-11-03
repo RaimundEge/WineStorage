@@ -145,11 +145,10 @@ function halfSize(rawTemps) {
 async function getTemps() {
     // call pione REST API for sqlite temp data
     var resp = await __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$axios$2f$lib$2f$axios$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["default"].get('http://pione:3000/' + `?range=${range}`);
-    console.log(resp.data);
+    // console.log(resp.data);
     var temps = [];
     resp.data.forEach((doc)=>{
-        // var dateString = doc.date.toISOString();
-        console.log('at: ', doc.date, ': ', doc.value);
+        // console.log('at: ', doc.date, ': ', doc.value);
         temps.push({
             time: doc.date,
             temp: degree == 'celsius' ? doc.value : doc.value * 9 / 5 + 32
