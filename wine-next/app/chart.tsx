@@ -13,7 +13,6 @@ import {
 } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import 'chartjs-adapter-date-fns';
-import { de, enUS } from 'date-fns/locale';
 ChartJS.register(
     CategoryScale,
     LinearScale,
@@ -25,7 +24,7 @@ ChartJS.register(
     Legend
 );
 
-export default function Chart({ data }: { data: {temps: { time: string; temp: number }[], degree: string, range: string }}) {
+export default function Chart({ data }: { data: { temps: { time: string; temp: number }[], degree: string, range: string } }) {
     var dateData: { x: Date, y: number }[] = [];
     var idealLow: { x: Date, y: number }[] = [];
     var idealHigh: { x: Date, y: number }[] = [];
@@ -46,21 +45,16 @@ export default function Chart({ data }: { data: {temps: { time: string; temp: nu
         ]
     };
     var tickFormat = 'MMM d, HH:mm';
-    switch (data.range) {   
-        case 'hour': 
-        case '2hours': 
-        case '6hours': 
-        case '12hours': 
+    switch (data.range) {
+        case 'hour':
+        case '2hours':
+        case '6hours':
+        case '12hours':
         case 'day': tickFormat = 'HH:MM'; break;
     }
     const options: any = {
         scales: {
             x: {
-                // adapters: {
-                //     date: {
-                //         locale: enUS
-                //     }
-                // },
                 grid: { display: false },
                 type: 'time',
                 time: {

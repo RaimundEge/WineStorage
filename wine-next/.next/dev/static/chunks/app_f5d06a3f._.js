@@ -386,11 +386,6 @@ function Chart({ data }) {
     const options = {
         scales: {
             x: {
-                // adapters: {
-                //     date: {
-                //         locale: enUS
-                //     }
-                // },
                 grid: {
                     display: false
                 },
@@ -421,12 +416,12 @@ function Chart({ data }) {
             options: options
         }, void 0, false, {
             fileName: "[project]/app/chart.tsx",
-            lineNumber: 82,
+            lineNumber: 76,
             columnNumber: 13
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/chart.tsx",
-        lineNumber: 81,
+        lineNumber: 75,
         columnNumber: 9
     }, this);
 }
