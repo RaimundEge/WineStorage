@@ -34,7 +34,7 @@ export default function Chart({ data }: { data: { temps: { time: string; temp: n
         if (item.temp < minTemp) minTemp = item.temp;
         if (item.temp > maxTemp) maxTemp = item.temp;
         dateData.push({ x: time, y: item.temp });
-        idealLow.push({ x: time, y: data.degree == 'celsius' ? 16.67 : 62.0 });
+        idealLow.push({ x: time, y: data.degree == 'celsius' ? 16 : 61.0 });
         idealHigh.push({ x: time, y: data.degree == 'celsius' ? 20 : 68.0 });
     }
     const lineData: any = {

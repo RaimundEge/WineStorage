@@ -30,21 +30,6 @@
       "exportedName": "getTemps",
       "filename": "app/actions.ts"
     },
-    "00b9d069306e82724f3207048ef12fc7ea02094ace": {
-      "workers": {
-        "app/page": {
-          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/app/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
-          "async": false,
-          "exportedName": "getTempsMongo",
-          "filename": "app/actions.ts"
-        }
-      },
-      "layer": {
-        "app/page": "rsc"
-      },
-      "exportedName": "getTempsMongo",
-      "filename": "app/actions.ts"
-    },
     "4049ad5e84d3cb88990325cbe4482b37b922797054": {
       "workers": {
         "app/page": {

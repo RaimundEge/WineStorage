@@ -1,6 +1,6 @@
 'use client';
 
-import { getTemps, update } from "./actions";
+import { update } from "./actions";
 
 export default function Update({ data }: { data: { temps: { time: string; temp: number }[], degree: string } }) {
     function last() {
