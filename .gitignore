@@ -21,6 +21,7 @@ node_modules
 
 # production
 /build
+**/log.txt
 
 # misc
 .DS_Store
