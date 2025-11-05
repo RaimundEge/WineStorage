@@ -1,5 +1,5 @@
 const sqlite3 = require("sqlite3");
-const db = new sqlite3.Database("../temper/winetemps.db");
+const db = new sqlite3.Database("temper/winetemps.db");
 let currentRange = '';
 let cachedTemps = [];
 
@@ -48,4 +48,4 @@ function getTemps(range, result) {
 
 }
 
-module.exports = { getTemps };
+module.exports = { getTemps, db };

@@ -4,8 +4,7 @@ Description=Wineroom Temperatures
 [Service]
 Type=simple
 User=ege
-WorkingDirectory=/home/ege/WineStorage/REST
-ExecStart=/home/ege/WineStorage/REST/run
+ExecStart=/home/ege/ColdRoomTempsWeb/run
 Restart=always
 
 [Install]

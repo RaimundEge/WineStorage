@@ -2,52 +2,15 @@
 <html lang="en">
 
 <head>
-  <title>Page Title</title>
+  <title>Wineroom PiOne</title>
   <meta charset="utf-8">
 </head>
 
 <body>
-  <h1>Example Chart</h1>
-  <p>
-    <%= data.length %> reords in <%= degree %>
-  </p>
-  <div>
-    <canvas id="myChart"></canvas>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <script>
-    const ctx = document.getElementById('myChart');
-    var data = <%- JSON.stringify(data) %> ;
-    var degree = '<%- degree %>';
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: data.map((row) => row.x),
-        datasets: [{
-          label: 'actual',
-          data: data.map((row) => degree === 'celsius' ? row.y: (row.y * 9 / 5) + 32 ),
-          borderWidth: 2,
-          borderColor: '#f00'
-        }]
-      },
-      options: {
-        scales: {
-          x: {
-            grid: { display: false },
-          },
-          y: {
-            min: (degree == 'celsius' ? 15 : 60),
-            max: (degree == 'celsius' ? 25 : 75),
-            grid: { display: false },
-            ticks: { stepSize: 5 },
-          }
-        },
-        pointStyle: false
-      }
-    });
-  </script>
+  <h1>PiOne Server</h1>
+  <ul>
+    <li><a href='latest'>Coldroom temperatur monitor</li>
+  </ul>
 </body>
 
 </html>

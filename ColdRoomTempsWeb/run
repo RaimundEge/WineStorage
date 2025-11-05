@@ -1,4 +1,5 @@
 #! /bin/bash
-LOGFILE=/home/ege/WineStorage/REST/log.txt
-rm -rf $LOGFILE
-node app.js >& $LOGFILE
+echo $HOME >>/tmp/refertemplog.txt
+cd $HOME/ColdRoomTempsWeb
+echo $PWD >>/tmp/refertemplog.txt
+node app.js >& log.txt

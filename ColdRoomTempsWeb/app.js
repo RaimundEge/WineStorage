@@ -1,16 +1,25 @@
 const express = require('express')
 const app = express();
 const PORT = process.env.PORT || 3000;
-const sqlite3 = require("sqlite3")
-const db = new sqlite3.Database("../temper/winetemps.db");
 const path = require('path');
 const lib = require("./lib");
 
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {
+    res.render('index');
+});
+
+app.get('/latest', (req, res) => {
+    const { range, degree } = req.query;
+    lib.getTemps(range, (rows) => {
+        res.render('temps', { data: rows, degree: degree  });
+    });
+});
+
+app.get('/oldTemps', (req, res) => {
     const { range } = req.query;
-    console.log(`Received range: ${range}`);
+    console.log(`/oldTemps for range: ${range}`);
     let delta = 0;
     switch (range) {
         case "all": delta = 24 * 365; break;
@@ -28,7 +37,7 @@ app.get('/', (req, res) => {
     let query = `SELECT * FROM Temps WHERE date >= ${since};`;
     console.log(`Constructed query: ${query}`);
 
-    db.all(query, [], (err, rows) => {
+    lib.db.all(query, [], (err, rows) => {
         if (err) {
             res.status(500).send(err.message);
 
@@ -43,13 +52,6 @@ app.get('/', (req, res) => {
             return row;
         });
         res.json(rows);
-    });
-});
-
-app.get('/latest', (req, res) => {
-    const { range, degree } = req.query;
-    const rows = lib.getTemps(range, (rows) => {
-        res.render('index', { data: rows, degree: degree  });
     });
 });
 
