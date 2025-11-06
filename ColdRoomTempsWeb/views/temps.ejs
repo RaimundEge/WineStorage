@@ -2,32 +2,69 @@
 <html lang="en">
 
 <head>
-  <title>Wine Storage Temperatur Monitor</title>
+  <title>Wine Storage Temperature Monitor</title>
   <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@latest/dist/css/bootstrap.min.css">
 </head>
 
 <body>
-  <h1>Wine Storage Temperature</h1>
-  <p>
-    <%= data.length %> reords in <%= degree %>
-  </p>
-  <div>
+  <div class="container">
+    <div class='page-header'>
+      <h1>Wine Storage Temperature</h1>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <label>Show: &nbsp;
+          <select name="range" id="rangeselect">
+            <option value="day">Cold Room</option>
+            <option value="hour">last hour</option>
+            <option value="2hours">last 2 hours</option>
+            <option value="6hours">last 6 hours</option>
+            <option value="12hours">last 12 hours</option>
+            <option value="day">last 24 hours</option>
+            <option value="2day">last 48 hours</option>
+            <option value="week">last 7 days</option>
+            <option value="month">last 30 days</option>
+            <option value="all">all</option>
+          </select>
+        </label>
+      </div>
+      <div class="col-sm">
+        Select degrees:&nbsp;
+        <label> <input type="radio" value="fahrenheit" name="degree" id="fahrenheit" /> Fahrenheit</label>
+        <label> <input type="radio" value="celsius" name="degree" id="celsius" /> Celsius</label>
+      </div>
+      <div class="col-sm">
+        Last update: <span id="lastupdate">
+          <%= new Date().toLocaleString() %>
+        </span>
+        <button class="btn btn-primary" id="updatebtn">Update</button>
+      </div>
+    </div>
     <canvas id="myChart"></canvas>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <footer class="fixed-bottom bg-light text-center ">
+    <h3>&copy; 2025 Lazy Acres Vineyard</h3>
+  </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  
   <script>
     const ctx = document.getElementById('myChart');
     var data = <%- JSON.stringify(data) %> ;
     var degree = '<%- degree %>';
+    var range = '<%- range %>';
+    document.getElementById('rangeselect').value = range;
+    document.getElementById(degree).checked = true;
     new Chart(ctx, {
       type: 'line',
       data: {
-        labels: data.map((row) => row.x),
+        labels: data.map((row) => { var d = new Date(row.x); return d; } ),
         datasets: [{
           label: 'actual',
-          data: data.map((row) => degree === 'celsius' ? row.y: (row.y * 9 / 5) + 32 ),
+          data: data.map((row) => degree === 'celsius' ? row.y : (row.y * 9 / 5) + 32),
           borderWidth: 2,
           borderColor: '#f00'
         }]
@@ -36,6 +73,9 @@
         scales: {
           x: {
             grid: { display: false },
+            type: 'time',
+            time: { unit: 'minute', displayFormats: { minute: 'HH:mm' }},
+            ticks: { stepSize: 10}
           },
           y: {
             min: (degree == 'celsius' ? 15 : 60),

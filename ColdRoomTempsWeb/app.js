@@ -13,9 +13,11 @@ app.get('/', (req, res) => {
 });
 
 app.get('/latest', (req, res) => {
-    const { range, degree } = req.query;
+    var { range, degree } = req.query;
+    if (!range) {range = 'day';}
+    if (!degree) {degree = 'fahrenheit';}
     lib.getTemps(range, (rows) => {
-        res.render('temps', { data: rows, degree: degree  });
+        res.render('temps', { data: rows, degree: degree, range: range });
     });
 });
 
