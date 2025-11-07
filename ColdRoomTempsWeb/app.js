@@ -5,7 +5,7 @@ const path = require('path');
 const lib = require("./lib");
 const cors = require('cors');
 app.use(cors());
-
+app.use(express.static('public'))
 app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => {

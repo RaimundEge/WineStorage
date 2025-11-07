@@ -8,49 +8,56 @@
 </head>
 
 <body>
+  <div class="px-5">
+    <div class="page-header bg-success text-white text-center p-3 mb-4">
+      <h3>Wine Storage Temperature</h3>
+    </div>
+  </div>
   <div class="container">
-    <div class='page-header'>
-      <h1>Wine Storage Temperature</h1>
+    <form action="/latest" method="get">
+      <div class="row">
+        <div class="col-sm text-end">
+          <label>Show: &nbsp;
+            <select name="range" id="rangeselect">
+              <option value="day">Cold Room</option>
+              <option value="hour">last hour</option>
+              <option value="2hours">last 2 hours</option>
+              <option value="6hours">last 6 hours</option>
+              <option value="12hours">last 12 hours</option>
+              <option value="day">last 24 hours</option>
+              <option value="2day">last 48 hours</option>
+              <option value="week">last 7 days</option>
+              <option value="month">last 30 days</option>
+              <option value="all">all</option>
+            </select>
+          </label>
+        </div>
+        <div class="col-sm text-center">
+          Select degrees:&nbsp;
+          <label> <input type="radio" value="fahrenheit" name="degree" id="fahrenheit" /> Fahrenheit</label>
+          <label> <input type="radio" value="celsius" name="degree" id="celsius" /> Celsius</label>
+        </div>
+        <div class="col-sm text-end">
+          <span id="lastupdate">
+            <%= new Date().toLocaleString() %>
+          </span>
+        </div>
+        <div class="col-sm">
+          <input type="submit" value="Update">
+        </div>
+    </form>
+  </div>
+  <canvas id="myChart"></canvas>
+  <div class="fixed-bottom px-5">
+    <div class="page-footer bg-success text-center p-2 mb-3 text-white">
+      <h4>&copy; 2025 Lazy Acres Vineyard</h4>
     </div>
-    <div class="row">
-      <div class="col-sm">
-        <label>Show: &nbsp;
-          <select name="range" id="rangeselect">
-            <option value="day">Cold Room</option>
-            <option value="hour">last hour</option>
-            <option value="2hours">last 2 hours</option>
-            <option value="6hours">last 6 hours</option>
-            <option value="12hours">last 12 hours</option>
-            <option value="day">last 24 hours</option>
-            <option value="2day">last 48 hours</option>
-            <option value="week">last 7 days</option>
-            <option value="month">last 30 days</option>
-            <option value="all">all</option>
-          </select>
-        </label>
-      </div>
-      <div class="col-sm">
-        Select degrees:&nbsp;
-        <label> <input type="radio" value="fahrenheit" name="degree" id="fahrenheit" /> Fahrenheit</label>
-        <label> <input type="radio" value="celsius" name="degree" id="celsius" /> Celsius</label>
-      </div>
-      <div class="col-sm">
-        Last update: <span id="lastupdate">
-          <%= new Date().toLocaleString() %>
-        </span>
-        <button class="btn btn-primary" id="updatebtn">Update</button>
-      </div>
-    </div>
-    <canvas id="myChart"></canvas>
   </div>
 
-  <footer class="fixed-bottom bg-light text-center ">
-    <h3>&copy; 2025 Lazy Acres Vineyard</h3>
-  </footer>
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-  
+  <script
+    src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+
   <script>
     const ctx = document.getElementById('myChart');
     var data = <%- JSON.stringify(data) %> ;
@@ -58,15 +65,37 @@
     var range = '<%- range %>';
     document.getElementById('rangeselect').value = range;
     document.getElementById(degree).checked = true;
+    // compute temperature average
+    var sum = data.reduce((acc, row) => acc + row.y, 0);
+    var avg = sum / data.length;
+    var avgDisplay = degree === 'celsius' ? avg : (avg * 9 / 5) + 32;
+    var lastTemp = degree === 'celsius' ? data[data.length - 1].y : (data[data.length - 1].y * 9 / 5) + 32;
+    var dateDisplay = new Date(data[data.length - 1].x).toLocaleString();
+    var avgLable = lastTemp.toFixed(1) + '\xB0(avg: ' + avgDisplay.toFixed(1) + '\xB0) at ' + dateDisplay;
+    document.getElementById('lastupdate').innerText = avgLable;
     new Chart(ctx, {
       type: 'line',
       data: {
-        labels: data.map((row) => { var d = new Date(row.x); return d; } ),
+        labels: data.map((row) => { var d = new Date(row.x); return d; }),
         datasets: [{
           label: 'actual',
           data: data.map((row) => degree === 'celsius' ? row.y : (row.y * 9 / 5) + 32),
           borderWidth: 2,
-          borderColor: '#f00'
+          borderColor: '#0f0'
+        }, {
+          label: 'ideal high',
+          data: data.map(() => degree === 'celsius' ? 20 : 68),
+          borderWidth: 1,
+          borderColor: '#f00',
+          borderDash: [5, 5]
+        },
+       
+        {
+          label: 'ideal low',
+          data: data.map(() => degree === 'celsius' ? 16 : 61),
+          borderWidth: 1,
+          borderColor: '#00f',
+          borderDash: [5, 5]
         }]
       },
       options: {
@@ -74,12 +103,12 @@
           x: {
             grid: { display: false },
             type: 'time',
-            time: { unit: 'minute', displayFormats: { minute: 'HH:mm' }},
-            ticks: { stepSize: 10}
+            time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } },
+            ticks: { stepSize: 10 }
           },
           y: {
-            min: (degree == 'celsius' ? 15 : 60),
-            max: (degree == 'celsius' ? 25 : 75),
+            min: (degree == 'celsius' ? 10 : 50),
+            max: (degree == 'celsius' ? 38 : 100),
             grid: { display: false },
             ticks: { stepSize: 5 },
           }
