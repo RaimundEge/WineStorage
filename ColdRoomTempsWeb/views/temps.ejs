@@ -15,11 +15,10 @@
   </div>
   <div class="container">
     <form action="/latest" method="get">
-      <div class="row">
+      <div class="row fs-6 small">
         <div class="col-sm text-end">
           <label>Show: &nbsp;
             <select name="range" id="rangeselect">
-              <option value="day">Cold Room</option>
               <option value="hour">last hour</option>
               <option value="2hours">last 2 hours</option>
               <option value="6hours">last 6 hours</option>
@@ -28,6 +27,7 @@
               <option value="2day">last 48 hours</option>
               <option value="week">last 7 days</option>
               <option value="month">last 30 days</option>
+              <option value="6months">last 6 months</option>
               <option value="all">all</option>
             </select>
           </label>
@@ -65,13 +65,16 @@
     var range = '<%- range %>';
     document.getElementById('rangeselect').value = range;
     document.getElementById(degree).checked = true;
-    // compute temperature average
+    // compute temperature high, low, average
+    let high = Math.max(...data.map(row => row.y));
+    let low = Math.min(...data.map(row => row.y));
     var sum = data.reduce((acc, row) => acc + row.y, 0);
     var avg = sum / data.length;
     var avgDisplay = degree === 'celsius' ? avg : (avg * 9 / 5) + 32;
     var lastTemp = degree === 'celsius' ? data[data.length - 1].y : (data[data.length - 1].y * 9 / 5) + 32;
-    var dateDisplay = new Date(data[data.length - 1].x).toLocaleString();
-    var avgLable = lastTemp.toFixed(1) + '\xB0(avg: ' + avgDisplay.toFixed(1) + '\xB0) at ' + dateDisplay;
+    var dateDisplay = new Date(data[data.length - 1].x).toString();
+    var shortDate = dateDisplay.substring(0, 4) + " at " + dateDisplay.substring(16,21);
+    var avgLable = lastTemp.toFixed(1) + '\xB0(avg: ' + avgDisplay.toFixed(1) + '\xB0) ' + shortDate;
     document.getElementById('lastupdate').innerText = avgLable;
     new Chart(ctx, {
       type: 'line',
@@ -81,20 +84,21 @@
           label: 'actual',
           data: data.map((row) => degree === 'celsius' ? row.y : (row.y * 9 / 5) + 32),
           borderWidth: 2,
-          borderColor: '#0f0'
+          borderColor: '#0f0',
+          backgroundColor: '#0f0'
         }, {
           label: 'ideal high',
           data: data.map(() => degree === 'celsius' ? 20 : 68),
           borderWidth: 1,
           borderColor: '#f00',
+          backgroundColor: '#f00',
           borderDash: [5, 5]
-        },
-       
-        {
+        }, {
           label: 'ideal low',
           data: data.map(() => degree === 'celsius' ? 16 : 61),
           borderWidth: 1,
           borderColor: '#00f',
+          backgroundColor: '#00f',
           borderDash: [5, 5]
         }]
       },
@@ -107,8 +111,8 @@
             ticks: { stepSize: 10 }
           },
           y: {
-            min: (degree == 'celsius' ? 10 : 50),
-            max: (degree == 'celsius' ? 38 : 100),
+            min: (degree == 'celsius' ? low - 6 : (low * 9 / 5) + 22),
+            max: (degree == 'celsius' ? high + 6 : (high * 9 / 5) + 42),
             grid: { display: false },
             ticks: { stepSize: 5 },
           }
