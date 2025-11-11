@@ -9,7 +9,7 @@
 
 <body>
   <div class="px-5">
-    <div class="page-header bg-success text-white text-center p-3 mb-4">
+    <div class="page-header bg-success text-white text-center p-2 mb-3">
       <h3>Wine Storage Temperature</h3>
     </div>
   </div>
@@ -28,6 +28,7 @@
               <option value="week">last 7 days</option>
               <option value="month">last 30 days</option>
               <option value="6months">last 6 months</option>
+              <option value="year">last year</option>
               <option value="all">all</option>
             </select>
           </label>
@@ -39,7 +40,7 @@
         </div>
         <div class="col-sm text-end">
           <span id="lastupdate">
-            <%= new Date().toLocaleString() %>
+            <img src="loading.gif" height="30px"/>
           </span>
         </div>
         <div class="col-sm">
@@ -49,7 +50,7 @@
   </div>
   <canvas id="myChart"></canvas>
   <div class="fixed-bottom px-5">
-    <div class="page-footer bg-success text-center p-2 mb-3 text-white">
+    <div class="page-footer bg-success text-center p-1 text-white">
       <h4>&copy; 2025 Lazy Acres Vineyard</h4>
     </div>
   </div>
@@ -107,14 +108,14 @@
           x: {
             grid: { display: false },
             type: 'time',
-            time: { unit: 'minute', displayFormats: { minute: 'HH:mm' } },
-            ticks: { stepSize: 10 }
+            time: range.includes('hour') || range.includes('day') ? { unit: 'minute', displayFormats: { minute: 'HH:mm' } } : {unit: 'hour', displayFormats: { hour: 'MMM dd' }},
+            ticks: { stepSize: 30 }
           },
           y: {
             min: (degree == 'celsius' ? low - 6 : (low * 9 / 5) + 22),
             max: (degree == 'celsius' ? high + 6 : (high * 9 / 5) + 42),
             grid: { display: false },
-            ticks: { stepSize: 5 },
+            ticks: { stepSize: degree === 'celsius' ? 5 : 10 },
           }
         },
         pointStyle: false

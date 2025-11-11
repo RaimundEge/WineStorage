@@ -4,7 +4,7 @@ let currentRange = '';
 let cachedTemps = [];
 
 function getTemps(range, result) {
-    console.log(`Received range: ${range}`);
+    console.log(`range: ${range}`);
     if (range === currentRange && cachedTemps.length > 0) {
         console.log(`Using cached data for range: ${range}`);
         // check how old cachedTemps is
@@ -27,7 +27,7 @@ function getTemps(range, result) {
                 // convert to local time
                 rows.forEach(row => {
                     cachedTemps.push({
-                        x: new Date(row.date + 'Z').toString(),
+                        x: new Date(row.date + 'Z').toISOString(),
                         y: row.value
                     });
                 });
@@ -39,7 +39,7 @@ function getTemps(range, result) {
     } else {
         let delta = 1;
         switch (range) {
-            case "all": delta = 24 * 365; break;
+            case "year": delta = 24 * 365; break;
             case 'hour': delta = 1; break;
             case '2hours': delta = 2; break;
             case '6hours': delta = 6; break;
@@ -51,9 +51,9 @@ function getTemps(range, result) {
             case 'month': delta = 30 * 24; break;
             case '6months': delta = 180 * 24; break;
         }
-        let since = `datetime('now', '-${delta} hours')`;
-        let query = `SELECT * FROM Temps WHERE date >= ${since};`;
-        console.log(`Constructed query: ${query}`);
+        let since = range==='all'? '':`WHERE date >= datetime('now', '-${delta} hours')`;
+        let query = `SELECT * FROM Temps ${since};`;
+        console.log(query);
 
         db.all(query, [], (err, rows) => {
             if (err) {
@@ -62,12 +62,24 @@ function getTemps(range, result) {
                 return;
             }
             console.log(`Retrieved ${rows.length} rows`);
-            // console.log('last row date:', rows[rows.length - 1].date);
-            // convert to local time
-            var data = rows.map(row => {
+            // convert rows into array of time in miliseconds, value
+            // console.log('rows: ', rows);
+            var temps = rows.map(row => {
                 return {
-                    x: new Date(row.date + 'Z').toString(),
-                    y: row.value
+                    time: new Date(row.date + 'Z').getTime(),
+                    value: row.value
+                };
+            });
+            while (temps.length > 1000) {
+                temps = halfSize(temps);
+                console.log(`Reduced to ${temps.length} entries`);
+            }
+            // console.log('temps:', temps);
+            // convert to local time
+            var data = temps.map(item => {
+                return {
+                    x: new Date(item.time).toISOString(),
+                    y: item.value
                 };
             });
             cachedTemps = data;
@@ -76,6 +88,30 @@ function getTemps(range, result) {
         });
     }
 
+}
+
+function halfSize(rawTemps) {  
+    var newTemps = [];
+    var prevTime = '';
+    var prevItem = null;
+    newTemps.push(rawTemps[0]);
+    for (var item of rawTemps) {
+        // console.log('item: ', item);
+        if (prevTime === '') {
+            prevItem = item;
+            prevTime = item.time;
+        } else {
+            var d1msecs = prevItem.time;
+            var d2msecs = item.time;
+            var avgTime = (d1msecs + d2msecs) / 2;
+            var result = new Date(avgTime);
+            // console.log('prev time: ', new Date(prevItem.time).toString(), ' current time: ', new Date(item.time).toString(), ' avg time: ', result.toString());   
+            var temp = (prevItem.value + item.value) / 2;
+            newTemps.push({time: avgTime, value: temp });
+            prevTime = '';
+        }
+    }
+    return newTemps;
 }
 
 module.exports = { getTemps, db };
