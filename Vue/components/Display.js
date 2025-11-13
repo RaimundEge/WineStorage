@@ -50,7 +50,7 @@ app.component('display', {
         async getTemps() {
             NProgress.start()
             var range = (this.range=='cold')?'day':this.range
-            var resp = await axios.get('http://pione:3000/oldTemps/' + `?range=${range}`)
+            var resp = await axios.get('https://wine.ege.com/oldTemps/' + `?range=${range}`)
             // console.log(resp.data)
             this.temps = resp.data
             console.log("REST backend returned: " + this.temps.length + " temperature records")
@@ -136,7 +136,7 @@ app.component('display', {
                 return ""
             } else {
                 // console.log(this.temps.length)
-                var lastEntry = this.temps[0]
+                var lastEntry = this.temps[this.temps.length - 1]
                 var temp = Math.round((this.degree == 'celsius' ? lastEntry.value : ((lastEntry.value * 9 / 5) + 32)) * 10) / 10 + '\xB0'
                 var avg = Math.round(this.average * 10) / 10 + '\xB0'
                 return temp + "(avg: " + avg + ") at " + this.format(lastEntry.date)
