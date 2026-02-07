@@ -51,7 +51,7 @@
   <canvas id="myChart"></canvas>
   <div class="fixed-bottom px-5">
     <div class="page-footer bg-success text-center p-1 text-white">
-      <h4>&copy; 2025 Lazy Acres Vineyard</h4>
+      <h4>&copy; 2026 Lazy Acres Vineyard</h4>
     </div>
   </div>
 
@@ -122,6 +122,16 @@
       }
     });
   </script>
+<script>
+  document.addEventListener("visibilitychange", function() {
+   if (document.hidden){
+       // console.log("Browser tab is hidden")
+   } else {
+       // console.log("Browser tab is visible")
+       location.reload();
+   }
+  });
+</script>
 </body>
 
 </html>
