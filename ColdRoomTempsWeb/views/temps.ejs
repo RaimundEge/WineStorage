@@ -123,13 +123,23 @@
     });
   </script>
 <script>
+  // Check if the last visit time is stored
+  const lastVisit = localStorage.getItem('lastVisitTime');
+  if (!lastVisit) {
+    localStorage.setItem('lastVisitTime', new Date().getTime());
+    // console.log("setting last visit: " + lastVisit);
+  }
+  
   document.addEventListener("visibilitychange", function() {
-   if (document.hidden){
-       // console.log("Browser tab is hidden")
-   } else {
-       // console.log("Browser tab is visible")
-       location.reload();
-   }
+    if (!document.hidden) {
+      const currentTime = new Date().getTime();
+      const timeSince = (currentTime - lastVisit)/1000;
+      // console.log("last visit: " + timeSince + " seconds ago");
+      if (timeSince > 120) {
+        localStorage.setItem('lastVisitTime', new Date().getTime());
+        location.reload();
+      }
+    }
   });
 </script>
 </body>
